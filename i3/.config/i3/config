@@ -217,10 +217,11 @@ bindsym Print exec --no-startup-id flameshot gui
 # ~/.i3/config.
 #
 # Monitor setup — CUSTOMIZE THIS for your hardware
-# Uncomment and adjust the outputs below to match your monitor configuration.
-# Use `xrandr --listmonitors` to see available outputs.
-# Example: disable laptop screen, use external monitor
-# exec --no-startup-id xrandr --output eDP-1 --off --output HDMI-1 --auto
+# Put machine-specific commands (xrandr, xmodmap, etc.) in ~/.config/i3/local.conf
+# That file is not tracked by git and won't be overwritten by stow.
+# Example local.conf content:
+#   exec --no-startup-id xrandr --output eDP-1 --off --output HDMI-1 --auto
+include ~/.config/i3/local.conf
 
 
 #catpuccin theme

@@ -104,10 +104,16 @@ Both fish and bash configs conditionally add CUDA to `PATH` and `LD_LIBRARY_PATH
 
 ### Monitor Configuration
 
-The i3 config has a commented-out `xrandr` line for monitor setup. On a fresh install:
+The i3 config includes `~/.config/i3/local.conf` for machine-specific commands (xrandr, xmodmap, etc.). This file is **not tracked by git** — create it on each machine:
 
-1. Run `xrandr --listmonitors` to see your outputs
-2. Edit `~/.config/i3/config` and uncomment/adjust the xrandr exec line
+```bash
+cat > ~/.config/i3/local.conf << 'EOF'
+# Machine-specific i3 config
+exec --no-startup-id xrandr --output eDP-1 --off --output HDMI-1 --auto
+EOF
+```
+
+Run `xrandr --listmonitors` to find your output names. i3 silently ignores the `include` if the file doesn't exist, so this is safe to skip on machines where the default display is fine.
 
 ### OpenCode
 

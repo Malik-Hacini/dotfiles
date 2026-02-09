@@ -1,6 +1,9 @@
 # Install log
 install.log
 
+# Machine-specific local overrides (not tracked)
+**/local.conf
+
 # OS files
 .DS_Store
 Thumbs.db

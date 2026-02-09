@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Debug log
+LOG="$HOME/zathura-debug.log"
+XID_FILE="$HOME/.zathura-tabbed-xid"
+
+echo "--- Run: $(date) ---" >> "$LOG"
+
+# Force X11 for Zathura
+export GDK_BACKEND=x11
+
+TABBED_NAME="zathura-tabbed"
+TABBED_BIN="$HOME/.local/bin/tabbed"
+XID=""
+
+# 1. Try to read XID from file
+if [ -f "$XID_FILE" ]; then
+    READ_XID=$(cat "$XID_FILE")
+    echo "Read XID from file: $READ_XID" >> "$LOG"
+    
+    # 2. Verify if this XID is still valid
+    if xwininfo -id "$READ_XID" > /dev/null 2>&1; then
+        XID=$READ_XID
+        echo "XID is valid." >> "$LOG"
+    else
+        echo "XID is invalid (window closed)." >> "$LOG"
+    fi
+fi
+
+# 3. If no valid XID found, start new instance
+if [ -z "$XID" ]; then
+    echo "Starting new instance..." >> "$LOG"
+    # -d: detach, -c: close on last tab, -n: name
+    # We use our custom compiled binary with Catppuccin theme baked in
+    XID=$("$TABBED_BIN" -d -c -n "$TABBED_NAME")
+    
+    echo "New XID created: $XID" >> "$LOG"
+    
+    # Save the new XID to file
+    echo "$XID" > "$XID_FILE"
+fi
+
+# 4. Open Zathura
+if [ -n "$XID" ]; then
+    echo "Opening Zathura in XID: $XID" >> "$LOG"
+    zathura -e "$XID" "$@" &
+    # Activate window
+    xdotool windowactivate "$XID" 2>/dev/null
+else
+    # Fallback
+    echo "Failed to get XID, running standalone" >> "$LOG"
+    zathura "$@" &
+fi

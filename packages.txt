@@ -1,0 +1,61 @@
+# ============================================
+# Dotfiles - APT Packages (Ubuntu/Debian)
+# ============================================
+# Only packages that are well-maintained in the Ubuntu repos.
+# Packages installed via other methods (PPA, binary, source) are
+# handled directly in install.sh.
+
+# Core tools
+git
+stow
+curl
+wget
+unzip
+build-essential
+cmake
+pkg-config
+
+# Window Manager & Desktop
+i3-wm
+i3lock
+i3status
+polybar
+picom
+rofi
+dunst
+flameshot
+xdotool
+x11-xserver-utils
+dex
+xss-lock
+network-manager-gnome
+pulseaudio-utils
+
+# CLI Tools
+htop
+neofetch
+ripgrep
+fd-find
+bat
+
+# Document / Academic
+zathura
+zathura-pdf-poppler
+texlive-full
+latexmk
+
+# Python (needed by Neovim plugins: pyright, black, isort, pylint, jupytext, ipython)
+python3
+python3-pip
+python3-venv
+
+# Node.js build dependencies (needed by nvim markdown-preview, mason LSP servers)
+# Actual Node.js is installed via NodeSource in install.sh
+
+# Suckless tabbed build dependencies
+libx11-dev
+libxft-dev
+
+# Other
+vlc
+xwininfo

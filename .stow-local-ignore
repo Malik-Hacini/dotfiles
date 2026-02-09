@@ -1,0 +1,11 @@
+# Files in the dotfiles root that should NOT be stowed
+# (Stow would try to symlink these into $HOME otherwise)
+\.git
+\.gitignore
+\.stow-local-ignore
+install\.sh
+install\.log
+packages\.txt
+README\.md
+LICENSE
+tabbed-src

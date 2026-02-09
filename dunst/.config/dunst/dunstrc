@@ -1,0 +1,67 @@
+[global]
+    # Font setup
+    font = JetBrainsMono Nerd Font 10
+    
+    # Geometry and Layout
+    width = 300
+    height = (0, 300)
+    origin = top-right
+    offset = (20, 60)
+    notification_limit = 5
+    
+    # Apperance
+    transparency = 10
+    frame_width = 2
+    frame_color = "#89b4fa"
+    corner_radius = 10
+    padding = 15
+    horizontal_padding = 15
+    text_icon_padding = 10
+    separator_color = frame
+    
+    # Behavior
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    
+    # Icons
+    icon_position = left
+    min_icon_size = 48
+    max_icon_size = 64
+    enable_recursive_icon_lookup = true
+    
+    # Formatting
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    ellipsize = middle
+    show_age_threshold = 60
+    word_wrap = yes
+    ignore_newline = no
+    
+    # Mouse
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+# --- Catppuccin Mocha Theme ---
+
+[urgency_low]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#89b4fa"
+    timeout = 10
+
+[urgency_normal]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#89b4fa"
+    timeout = 10
+
+[urgency_critical]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#fab387"
+    timeout = 0

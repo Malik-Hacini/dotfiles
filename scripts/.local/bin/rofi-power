@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Define the options
+OPTIONS="  Shutdown\n  Reboot\n󰍃  Logout\n  Lock\n  Suspend"
+
+# Show the menu and capture the choice
+# -theme sets the custom theme with no input bar
+CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -i -theme ~/.config/rofi/power.rasi)
+
+# Execute the command based on choice
+case "$CHOICE" in
+    *Shutdown)
+        systemctl poweroff
+        ;;
+    *Reboot)
+        systemctl reboot
+        ;;
+    *Logout)
+        i3-msg exit
+        ;;
+    *Lock)
+        # You might need to install 'i3lock' for this
+        i3lock -c 000000
+        ;;
+    *Suspend)
+        systemctl suspend
+        ;;
+esac

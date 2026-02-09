@@ -1,0 +1,25 @@
+configuration{
+    modi: "combi,drun,run,window";
+    combi-modi: "drun,run,window";
+    icon-theme: "Oranchelo";
+    show-icons: true;
+    terminal: "alacritty";
+    combi-display-format: "{icon} {name}";
+    combi-hide-mode-prefix: true;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-run: "";
+    display-window: "";
+    sidebar-mode: false;
+}
+
+@theme "catppuccin-mocha"
+
+listview {
+    lines: 5;
+    columns: 1;
+}
+
+prompt {
+    enabled: false;
+}

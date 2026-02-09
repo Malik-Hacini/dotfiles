@@ -1,0 +1,139 @@
+# "window.opacity" = 0.8
+
+# Add live config reload at the top
+[general]
+live_config_reload = true
+
+# Ubuntu terminal-like colors
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#666666"
+blue = "#3465A4"
+cyan = "#06989A"
+green = "#4E9A06"
+magenta = "#75507B"
+red = "#EF2929"
+white = "#FFFFFF"
+yellow = "#C4A000"
+
+[colors.normal]
+black = "#2E3436"
+blue = "#3465A4"
+cyan = "#06989A"
+green = "#4E9A06"
+magenta = "#75507B"
+red = "#CC0000"
+white = "#D3D7CF"
+yellow = "#C4A000"
+
+[colors.primary]
+background = "#1e1e2e"
+foreground = "#FFFFFF"
+
+[font]
+size = 11.2
+
+[font.bold]
+family = "JetBrainsMono Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font Mono"
+style = "Bold Italic"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "JetBrainsMono Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMono Nerd Font Mono"
+style = "Regular"
+
+
+[font.offset]
+x = 0
+y = 0
+
+[scrolling]
+history = 5000
+multiplier = 10
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[terminal.shell]
+program = "/usr/bin/fish"
+
+# [[shell.key_bindings]]
+# action = "Paste"
+# key = "V"
+# mods = "Control|Shift"
+#
+# [[shell.key_bindings]]
+# action = "Copy"
+# key = "C"
+# mods = "Control|Shift"
+#
+# [[shell.key_bindings]]
+# action = "ResetFontSize"
+# key = "Key0"
+# mods = "Control"
+#
+# [[shell.key_bindings]]
+# action = "IncreaseFontSize"
+# key = "Equals"
+# mods = "Control"
+#
+# [[shell.key_bindings]]
+# action = "IncreaseFontSize"
+# key = "Add"
+# mods = "Control"
+#
+# [[shell.key_bindings]]
+# action = "DecreaseFontSize"
+# key = "Subtract"
+# mods = "Control"
+#
+# [[shell.key_bindings]]
+# action = "DecreaseFontSize"
+# key = "Minus"
+# mods = "Control"
+#
+# [[shell.key_bindings]]
+# action = "SpawnNewInstance"
+# key = "N"
+# mods = "Control"
+
+[window]
+decorations = "none"  # No title bar
+startup_mode = "Windowed"  
+title = "Alacritty"
+
+
+# Position window at the right half of the screen
+[window.position]
+x = 2880
+y = 0
+
+# Dimensions - using columns and lines instead of pixels can be more reliable
+[window.dimensions]
+columns = 80
+lines = 54
+
+# Remove padding
+[window.padding]
+x = 0
+y = 0
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[terminal]

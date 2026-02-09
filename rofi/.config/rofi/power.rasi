@@ -1,0 +1,31 @@
+@theme "catppuccin-mocha"
+
+window {
+    font: "JetBrainsMono Nerd Font 14";
+    width: 250;
+  padding: 10px;
+}
+
+inputbar {
+    enabled: false;
+}
+
+listview {
+    lines: 5;
+    columns: 1;
+    scrollbar: false;
+    margin: 0px;
+    padding: 5px;
+}
+
+element {
+    padding: 8px;
+}
+
+element-text {
+    horizontal-align: 0.0;
+}
+
+prompt {
+    enabled: false;
+}

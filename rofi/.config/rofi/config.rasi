@@ -4,10 +4,8 @@ configuration{
     icon-theme: "Oranchelo";
     show-icons: true;
     terminal: "alacritty";
-    combi-display-format: "{icon} {name}";
     combi-hide-mode-prefix: true;
     disable-history: false;
-    hide-scrollbar: true;
     display-run: "";
     display-window: "";
     sidebar-mode: false;

@@ -19,7 +19,6 @@ window {
     font: "JetBrainsMono Nerd Font Mono 14";
     border:1px;
     border-color: @fg-col;
-    border-radius: 10px;
     background-color: @bg-col;
     padding: -10px 20px 20px 20px;
 }

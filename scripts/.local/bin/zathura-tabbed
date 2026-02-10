@@ -1,53 +1,77 @@
 #!/bin/bash
 
 # Debug log
-LOG="$HOME/zathura-debug.log"
-XID_FILE="$HOME/.zathura-tabbed-xid"
-
+LOG="/home/tag/zathura-debug.log"
 echo "--- Run: $(date) ---" >> "$LOG"
 
 # Force X11 for Zathura
 export GDK_BACKEND=x11
 
 TABBED_NAME="zathura-tabbed"
-TABBED_BIN="$HOME/.local/bin/tabbed"
+TABBED_BIN="/home/tag/.local/bin/tabbed"
+
+# 1. Get Current i3 Workspace Name
+# We use jq to parse the focused workspace name safely
+WS_NAME=$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused==true).name')
+
+if [ -z "$WS_NAME" ]; then
+    echo "Could not detect i3 workspace, falling back to 'default'" >> "$LOG"
+    WS_NAME="default"
+fi
+
+echo "Current Workspace: $WS_NAME" >> "$LOG"
+
+# 2. Define Workspace-Specific Lockfile
+XID_FILE="/home/tag/.zathura-tabbed-xid-${WS_NAME//\//_}" # Replace slashes in name just in case
+
 XID=""
 
-# 1. Try to read XID from file
+# 3. Try to read XID from file
 if [ -f "$XID_FILE" ]; then
     READ_XID=$(cat "$XID_FILE")
     echo "Read XID from file: $READ_XID" >> "$LOG"
     
-    # 2. Verify if this XID is still valid
+    # 4. Verify if this XID is valid AND is actually our tabbed window
+    # We check the window name (-name) or class to ensure we don't attach to a random window after reboot
     if xwininfo -id "$READ_XID" > /dev/null 2>&1; then
-        XID=$READ_XID
-        echo "XID is valid." >> "$LOG"
+        # Check actual window class/name to be 100% sure
+        CHECK_NAME=$(xdotool getwindowname "$READ_XID" 2>/dev/null)
+        # Note: tabbed title changes, so checking name is tricky.
+        # Better: Check WM_CLASS. tabbed sets class to 'tabbed' and instance to what we set (-n)
+        CHECK_CLASS=$(xprop -id "$READ_XID" WM_CLASS 2>/dev/null)
+        
+        if [[ "$CHECK_CLASS" == *"$TABBED_NAME"* ]]; then
+             XID=$READ_XID
+             echo "XID is valid and verified as zathura-tabbed." >> "$LOG"
+        else
+             echo "XID exists but class mismatch (Old ID reused?): $CHECK_CLASS" >> "$LOG"
+        fi
     else
         echo "XID is invalid (window closed)." >> "$LOG"
     fi
 fi
 
-# 3. If no valid XID found, start new instance
+# 5. If no valid XID found, start new instance
 if [ -z "$XID" ]; then
-    echo "Starting new instance..." >> "$LOG"
-    # -d: detach, -c: close on last tab, -n: name
-    # We use our custom compiled binary with Catppuccin theme baked in
-    XID=$("$TABBED_BIN" -d -c -n "$TABBED_NAME")
+    echo "Starting new instance for workspace $WS_NAME..." >> "$LOG"
+    
+    XID=$("$TABBED_BIN" -d -c -n "$TABBED_NAME" 2>>"$LOG")
     
     echo "New XID created: $XID" >> "$LOG"
     
-    # Save the new XID to file
+    # Save the new XID to workspace-specific file
     echo "$XID" > "$XID_FILE"
 fi
 
-# 4. Open Zathura
+# 6. Open Zathura
 if [ -n "$XID" ]; then
     echo "Opening Zathura in XID: $XID" >> "$LOG"
-    zathura -e "$XID" "$@" &
+    zathura -e "$XID" "$@" 2>>"$LOG" &
+    
     # Activate window
     xdotool windowactivate "$XID" 2>/dev/null
 else
     # Fallback
     echo "Failed to get XID, running standalone" >> "$LOG"
-    zathura "$@" &
+    zathura "$@" 2>>"$LOG" &
 fi

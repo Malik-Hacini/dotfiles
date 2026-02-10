@@ -15,7 +15,7 @@ set window-width 1280
 set window-height 1080
 set adjust-open "best-fit"
 set guioptions sv # Remove all GUI elements (menubar, statusbar, scrollbars)
-set window-padding 0 # Set window padding to 0
+set scroll-step 40 # Increase scroll speed
 
 # ---------------------
 # Keybindings
@@ -25,8 +25,8 @@ map K zoom in
 map J zoom out
 map p print
 map w recolor
-map k 5k
-map j 5k
+map k scroll up
+map j scroll down
 map <C-v> toggle_fullscreen
 
 # ---------------------

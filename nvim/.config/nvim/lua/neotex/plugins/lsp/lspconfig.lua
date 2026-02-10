@@ -10,6 +10,14 @@ return {
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     local default = cmp_nvim_lsp.default_capabilities()
 
+    -- Helper: only enable an LSP server if its binary is on PATH
+    local function enable_if_executable(server_name, cmd)
+      cmd = cmd or server_name
+      if vim.fn.executable(cmd) == 1 then
+        vim.lsp.enable(server_name)
+      end
+    end
+
     -- DIAGNOSTICS CONFIGURATION
     local signs = { Error = "", Warn = "", Hint = "󰠠", Info = "" }
     vim.diagnostic.config({
@@ -33,16 +41,14 @@ return {
        settings = {
         python = {
           analysis = {
-            -- I moved your custom python paths here where they belong
-            extraPaths = { "/home/benjamin/Documents/Philosophy/Projects/ModelChecker/Code/src" },
             typeCheckingMode = "basic",
           }
         },
       },
     })
-    vim.lsp.enable("pyright")
+    enable_if_executable("pyright", "pyright-langserver")
 
-    -- LATEX SERVER (Fixed: Removed Python settings from here)
+    -- LATEX SERVER
     vim.lsp.config("texlab", {
       capabilities = default,
       settings = {
@@ -58,7 +64,7 @@ return {
         },
       },
     })
-    vim.lsp.enable("texlab")
+    enable_if_executable("texlab")
 
     -- TYPST SERVER
     -- Ensure you have run :Lazy update for this to work
@@ -66,7 +72,7 @@ return {
         capabilities = default,
         single_file_support = true,
     })
-    vim.lsp.enable("tinymist")
+    enable_if_executable("tinymist")
 
     -- LUA SERVER
     vim.lsp.config("lua_ls", {
@@ -85,6 +91,6 @@ return {
         },
       },
     })
-    vim.lsp.enable("lua_ls")
+    enable_if_executable("lua_ls", "lua-language-server")
   end,
 }

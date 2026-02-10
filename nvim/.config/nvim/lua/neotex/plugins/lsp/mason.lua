@@ -44,12 +44,19 @@ return {
       -- auto-install configured servers (with lspconfig)
       automatic_installation = true, -- not the same as ensure_installed
       handlers = {
-        -- The first entry (without key) will be the default handler
-        -- and will be called for each installed server that doesn't have
-        -- a dedicated handler.
-        function(server_name) -- default handler
-          vim.lsp.config(server_name, {})
-          vim.lsp.enable(server_name)
+        -- Default handler: only enable servers we explicitly configure in lspconfig.
+        -- This prevents Mason-installed formatters/linters (stylua, black, etc.)
+        -- from being accidentally started as LSP servers.
+        function(server_name)
+          local configured_servers = { "pyright", "texlab", "tinymist", "lua_ls" }
+          for _, s in ipairs(configured_servers) do
+            if server_name == s then
+              -- Server is already configured and enabled in lspconfig.lua,
+              -- so we just need to register its config (without re-enabling).
+              return
+            end
+          end
+          -- Unknown server discovered by mason-lspconfig: skip it silently.
         end,
       },
     })

@@ -54,3 +54,6 @@ end
 if test -x $HOME/.local/opt/zen/zen
     alias zen $HOME/.local/opt/zen/zen
 end
+
+# Use portal for file picker
+set -gx GTK_USE_PORTAL 1

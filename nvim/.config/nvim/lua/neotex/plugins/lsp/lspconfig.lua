@@ -13,6 +13,7 @@ return {
     -- DIAGNOSTICS CONFIGURATION
     local signs = { Error = "", Warn = "", Hint = "󰠠", Info = "" }
     vim.diagnostic.config({
+      virtual_text = true,
       signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = signs.Error,
@@ -21,6 +22,9 @@ return {
           [vim.diagnostic.severity.INFO] = signs.Info,
         },
       },
+      underline = true,
+      update_in_insert = false,
+      severity_sort = true,
     })
 
     -- PYTHON SERVER

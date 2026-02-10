@@ -96,16 +96,29 @@ return {
     end
     
     if is_executable("pylint") then
-      lint.linters.pylint = lint.linters.pylint or {}
-      lint.linters.pylint.args = {
-        "--disable=C0111",
+      -- Customize pylint while preserving nvim-lint's required defaults
+      -- (nvim-lint needs -f json --from-stdin to parse output)
+      local pylint = lint.linters.pylint
+      local custom_args = {
+        "--disable=C0103,C0111,C0114,C0115,C0116,C0301,C0302,W0105,R0903,R0913,R0914",
+        "--max-line-length=88",
       }
-      
-      -- Only add pylintrc if it exists
-      local pylintrc_path = vim.fn.expand("$HOME/.pylintrc")
-      if vim.fn.filereadable(pylintrc_path) == 1 then
-        table.insert(lint.linters.pylint.args, "--rcfile=" .. pylintrc_path)
+
+      -- Add pylintrc if it exists
+      local pylintrc_paths = {
+        vim.fn.expand("$HOME/.pylintrc"),
+        vim.fn.expand("$HOME/.config/nvim/.pylintrc"),
+      }
+      for _, pylintrc_path in ipairs(pylintrc_paths) do
+        if vim.fn.filereadable(pylintrc_path) == 1 then
+          table.insert(custom_args, "--rcfile=" .. pylintrc_path)
+          break
+        end
       end
+
+      -- Prepend custom args before the built-in defaults (-f json --from-stdin ...)
+      local default_args = pylint.args or {}
+      pylint.args = vim.list_extend(vim.deepcopy(custom_args), default_args)
     end
     
     if is_executable("luacheck") then
@@ -205,13 +218,6 @@ return {
       desc = "Toggle auto-linting",
     })
     
-    -- LSP diagnostics integration
-    vim.diagnostic.config({
-      virtual_text = true,
-      signs = true,
-      underline = true,
-      update_in_insert = false,
-      severity_sort = true,
-    })
+    -- Note: vim.diagnostic.config() is set in lspconfig.lua
   end,
 }

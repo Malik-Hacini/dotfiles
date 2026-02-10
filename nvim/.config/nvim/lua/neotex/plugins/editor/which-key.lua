@@ -504,6 +504,7 @@ return {
 
         -- MARKDOWN/PREVIEW & FORMATTING
         p = { function() require("conform").format({ async = true, lsp_fallback = true }) end, "format buffer" },
+        -- o = markdown preview (keymap defined in markdown-preview.lua via lazy keys)
         u = { "<cmd>lua OpenUrlUnderCursor()<CR>", "open URL under cursor" },
 
         -- FOLDING

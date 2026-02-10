@@ -44,6 +44,9 @@ zathura-pdf-poppler
 texlive-full
 latexmk
 
+# Image viewer
+sxiv
+
 # Python (needed by Neovim plugins: pyright, black, isort, pylint, jupytext, ipython)
 python3
 python3-pip

@@ -26,7 +26,7 @@ After installation, log out and back in for the fish shell change to take effect
 | Node.js | NodeSource LTS | Needed by nvim plugins (markdown-preview, Mason LSPs) |
 
 ### Via apt (from packages.txt)
-i3-wm, polybar, picom, rofi, dunst, flameshot, zathura, texlive-full, htop, neofetch, python3, qutebrowser, vlc, and build dependencies.
+i3-wm, polybar, picom, rofi, dunst, flameshot, zathura, sxiv, texlive-full, htop, neofetch, python3, qutebrowser, vlc, and build dependencies.
 
 ### Via binary/script installers
 | Tool | Method |
@@ -40,7 +40,7 @@ i3-wm, polybar, picom, rofi, dunst, flameshot, zathura, texlive-full, htop, neof
 ### Built from source
 | Tool | Purpose |
 |------|---------|
-| suckless tabbed | Tab container for zathura (zathura-tabbed script) |
+| suckless tabbed | Tab container for zathura and sxiv (zathura-tabbed, sxiv-tabbed scripts) |
 
 ### Python tools (pip --user)
 ipython, jupytext, black, isort, pylint — all used by Neovim plugins.
@@ -71,7 +71,7 @@ JetBrainsMono Nerd Font, RobotoMono Nerd Font, NerdFontsSymbolsOnly, Font Awesom
 | `neofetch` | `~/.config/neofetch/config.conf` |
 | `htop` | `~/.config/htop/htoprc` |
 | `latex` | `~/texmf/` (custom .bst files) |
-| `scripts` | `~/.local/bin/rofi-power`, `~/.local/bin/zathura-tabbed` |
+| `scripts` | `~/.local/bin/rofi-power`, `~/.local/bin/zathura-tabbed`, `~/.local/bin/sxiv-tabbed` |
 
 ## Install Script Options
 

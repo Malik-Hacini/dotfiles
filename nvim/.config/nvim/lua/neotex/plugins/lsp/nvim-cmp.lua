@@ -94,7 +94,7 @@ return {
         -- ["<C-h>"] = cmp.mapping.abort(), -- close completion window
         -- ["<C-l>"] = cmp.mapping.confirm({ select = false }),
         ["<CR>"] = cmp.mapping.confirm({ select = false }),
-        -- supertab
+        -- supertab (with Copilot integration)
         ["<Tab>"] = cmp.mapping(function(fallback)
           -- Check if we're in a markdown file and in a list item
           if vim.bo.filetype == "markdown" then
@@ -120,6 +120,13 @@ return {
             return
           end
           
+          -- Copilot: accept suggestion if visible
+          local copilot_ok, copilot_suggestion = pcall(require, "copilot.suggestion")
+          if copilot_ok and copilot_suggestion.is_visible() then
+            copilot_suggestion.accept()
+            return
+          end
+
           -- Standard cmp Tab behavior
           if luasnip.expandable() then
             luasnip.expand()
@@ -253,6 +260,14 @@ return {
         {name = 'cmdline'}
       }
     })
+
+    -- Hide Copilot ghost text when nvim-cmp menu is open
+    cmp.event:on("menu_opened", function()
+      vim.b.copilot_suggestion_hidden = true
+    end)
+    cmp.event:on("menu_closed", function()
+      vim.b.copilot_suggestion_hidden = false
+    end)
 
   end,
 }

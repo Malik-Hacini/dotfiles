@@ -12,6 +12,8 @@
 -- - surround.lua: Text surrounding functionality
 -- - todo-comments.lua: Highlight and search TODO comments
 -- - yanky.lua: Enhanced yank and paste functionality
+-- - copilot.lua: GitHub Copilot AI completion
+-- - opencode.lua: OpenCode AI coding assistant
 --
 -- Note: The following remain in other modules:
 -- - toggleterm.lua: Terminal integration (editor module)
@@ -64,6 +66,8 @@ local mini_module = safe_require("neotex.plugins.tools.mini")
 local surround_module = safe_require("neotex.plugins.tools.surround")
 local todo_comments_module = safe_require("neotex.plugins.tools.todo-comments")
 local yanky_module = safe_require("neotex.plugins.tools.yanky")
+local copilot_module = safe_require("neotex.plugins.tools.copilot")
+local opencode_module = safe_require("neotex.plugins.tools.opencode")
 
 -- Create array of valid plugin specs
 local plugins = {}
@@ -84,6 +88,8 @@ add_if_valid(mini_module)
 add_if_valid(surround_module)
 add_if_valid(todo_comments_module)
 add_if_valid(yanky_module)
+add_if_valid(copilot_module)
+add_if_valid(opencode_module)
 
 -- Return only valid plugin specs
 return plugins

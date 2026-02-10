@@ -1,0 +1,72 @@
+#!/bin/bash
+# Workspace-aware sxiv-tabbed wrapper with title fix
+
+# 1. Setup
+TABBED_NAME="sxiv-tabbed"
+TABBED_BIN="$HOME/.local/bin/tabbed"
+
+# Get current workspace for isolation
+WS_NAME=$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | select(.focused==true).name')
+[ -z "$WS_NAME" ] && WS_NAME="default"
+XID_FILE="$HOME/.sxiv-tabbed-xid-${WS_NAME//\//_}"
+
+# 2. Get or Create Tabbed Window
+XID=""
+if [ -f "$XID_FILE" ]; then
+    READ_XID=$(cat "$XID_FILE")
+    # Verify XID exists
+    if xwininfo -id "$READ_XID" >/dev/null 2>&1; then
+        XID=$READ_XID
+    fi
+fi
+
+if [ -z "$XID" ]; then
+    # Start new tabbed instance
+    # -d: detach, -c: close on last tab, -n: name
+    XID=$("$TABBED_BIN" -d -c -n "$TABBED_NAME")
+    echo "$XID" > "$XID_FILE"
+fi
+
+# 3. Identify Filename (for title)
+# Get the last argument
+FILE="${@: -1}"
+# If it's a file, get basename. If not (e.g. dir), use string as is.
+if [ -f "$FILE" ]; then
+    FILENAME=$(basename "$FILE")
+else
+    FILENAME="$FILE"
+fi
+
+# 4. Helper to get child windows of tabbed
+get_children() {
+    # Match lines starting with whitespace + 0x
+    xwininfo -children -id "$XID" | grep -E "^\s+0x" | awk '{print $1}' | sort
+}
+
+# Snapshot existing children
+OLD_CHILDREN=$(get_children)
+
+# 5. Launch sxiv embedded
+sxiv -e "$XID" "$@" &
+
+# 6. Background job to catch the new window and fix its title
+(
+    # Try for up to 1 second
+    for i in {1..20}; do
+        NEW_CHILDREN=$(get_children)
+        
+        # Find ID present in NEW but not OLD
+        TARGET_ID=$(comm -13 <(echo "$OLD_CHILDREN") <(echo "$NEW_CHILDREN") | head -n 1)
+        
+        if [ -n "$TARGET_ID" ]; then
+            # Force title update
+            xprop -id "$TARGET_ID" -f _NET_WM_NAME 8u -set _NET_WM_NAME "$FILENAME"
+            xprop -id "$TARGET_ID" -f WM_NAME 8s -set WM_NAME "$FILENAME"
+            break
+        fi
+        sleep 0.05
+    done
+) &
+
+# 7. Activate Tabbed
+xdotool windowactivate "$XID" 2>/dev/null

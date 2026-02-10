@@ -63,6 +63,10 @@ tiling_drag modifier titlebar
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
+#start zen browser (requires symlink of your zen install to "zen")
+
+bindsym $mod+z exec zen
+
 # kill focused window
 bindsym $mod+q kill
 

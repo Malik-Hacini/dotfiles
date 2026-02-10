@@ -318,6 +318,8 @@ stow_packages() {
         neofetch
         htop
         qutebrowser
+        xdg-desktop-portal
+        xdg-desktop-portal-termfilechooser
         latex
         scripts
     )

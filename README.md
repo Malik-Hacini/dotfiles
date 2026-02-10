@@ -67,6 +67,8 @@ JetBrainsMono Nerd Font, RobotoMono Nerd Font, NerdFontsSymbolsOnly, Font Awesom
 | `zathura` | `~/.config/zathura/` (zathurarc, catppuccin theme) |
 | `lazygit` | `~/.config/lazygit/config.yml` |
 | `qutebrowser` | `~/.config/qutebrowser/` |
+| `xdg-desktop-portal` | `~/.config/xdg-desktop-portal/portals.conf` (routes FileChooser to termfilechooser) |
+| `xdg-desktop-portal-termfilechooser` | `~/.config/xdg-desktop-portal-termfilechooser/` (yazi-wrapper.sh, config) |
 | `fontconfig` | `~/.config/fontconfig/` |
 | `neofetch` | `~/.config/neofetch/config.conf` |
 | `htop` | `~/.config/htop/htoprc` |
@@ -126,6 +128,21 @@ The Neovim config (telescope-bibtex) expects `~/texmf/bibtex/bib/Zotero.bib`. If
 ### Suckless tabbed (Catppuccin theme)
 
 The install script builds a vanilla `tabbed` from suckless.org. If you want the Catppuccin-themed version, you can place a patched `tabbed` source tree at `~/dotfiles/tabbed-src/` before running install — the script will detect and use it instead of cloning vanilla upstream. Otherwise you can rebuild with your preferred patches after install.
+
+### xdg-desktop-portal-termfilechooser (yazi as file picker)
+
+GTK file dialogs (e.g. in Zen Browser) are replaced with yazi running in alacritty via `xdg-desktop-portal-termfilechooser`. The config and wrapper script are managed by stow, but the **portal backend binary itself must be built from source**:
+
+```bash
+# Build and install the portal backend
+git clone https://github.com/boydaihungst/xdg-desktop-portal-termfilechooser.git /tmp/xdptf
+cd /tmp/xdptf
+meson setup build
+ninja -C build
+sudo ninja -C build install
+```
+
+After installing, the portal activates via D-Bus on demand. The i3 config already imports the environment into systemd and restarts the service on login. See `~/.config/xdg-desktop-portal-termfilechooser/agents.md` for architecture details and debugging commands.
 
 ## Neovim Plugin Dependencies
 

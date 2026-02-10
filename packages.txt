@@ -37,6 +37,7 @@ neofetch
 ripgrep
 fd-find
 bat
+feh
 
 # Document / Academic
 zathura

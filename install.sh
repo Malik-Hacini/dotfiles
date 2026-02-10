@@ -322,6 +322,7 @@ stow_packages() {
         xdg-desktop-portal-termfilechooser
         latex
         scripts
+        wallpapers
     )
 
     # Ensure target directories exist (stow needs the parent directories)

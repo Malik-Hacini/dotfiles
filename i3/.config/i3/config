@@ -27,6 +27,9 @@ exec --no-startup-id systemctl --user import-environment && systemctl --user res
 exec_always --no-startup-id killall polybar
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 
+#wallpaper 
+exec_always --no-startup-id feh --bg-fill ~/Pictures/Wallpapers/catppuccin_gyro.jpg
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 

@@ -38,7 +38,7 @@ This configuration requires the `uv` package manager (a modern alternative to np
    - For new features: Add documentation to this README.md
 
 4. **Organize Related Functions**: Keep related functionality together in appropriate files:
-   - Core settings: `lua/neotex/core/`
+   - Core settings: `lua/neotex/config/`
    - Plugin configurations: `lua/neotex/plugins/`
    - Filetype-specific settings: `after/ftplugin/`
 
@@ -631,7 +631,7 @@ This configuration includes built-in tools for analyzing and improving performan
 3. **Optimization Reports**: Generate comprehensive reports with `:OptimizationReport`
 4. **Lazy-Loading Suggestions**: Get plugin-specific recommendations with `:SuggestLazyLoading`
 
-These tools provide actionable insights to help you maintain a fast and responsive editing environment. See the comprehensive documentation in `lua/neotex/utils/README.md` for more details on the optimization workflow.
+These tools provide actionable insights to help you maintain a fast and responsive editing environment. See the comprehensive documentation in `lua/neotex/util/README.md` for more details on the optimization workflow.
 
 ### Testing Your Changes
 

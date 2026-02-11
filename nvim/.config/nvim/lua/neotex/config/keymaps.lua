@@ -6,8 +6,8 @@
 NOTE: These mappings are also documented in ~/.config/nvim/README.md
 Please maintain consistency between both documents when making changes.
 
-This file defines global keybindings, with special handling for terminal, markdown,
-and Avante AI buffers. The file organizes keymaps by functionality and uses helper
+This file defines global keybindings, with special handling for terminal and markdown
+buffers. The file organizes keymaps by functionality and uses helper
 functions for consistent definitions.
 
 Global keymaps use the `map()` function with descriptions, while buffer-specific maps
@@ -20,7 +20,7 @@ TERMINAL MODE KEYBINDINGS                      | DESCRIPTION
 <Esc>                                          | Exit terminal mode to normal mode
 <C-t>                                          | Toggle terminal window
 <C-h>, <C-j>, <C-k>, <C-l>                     | Navigate between windows
-<C-a>                                          | Ask Avante AI a question (non-lazygit only)
+<C-a>                                          | Ask OpenCode in terminal (non-lazygit only)
 <M-h>, <M-l>, <M-Left>, <M-Right>              | Resize terminal window horizontally
 
 ----------------------------------------------------------------------------------
@@ -69,16 +69,6 @@ d (visual mode)                                | Delete selection and recalculat
 <C-n>                                          | Toggle checkbox status ([ ] ↔ [x])
 <C-c>                                          | Recalculate list numbering
 
-----------------------------------------------------------------------------------
-AVANTE AI BUFFER KEYBINDINGS                   | DESCRIPTION
-----------------------------------------------------------------------------------
-<C-t>                                          | Toggle Avante interface
-<C-c>                                          | Reset/clear Avante content
-<C-m>                                          | Select model for current provider
-<C-p>                                          | Select provider and model
-<C-s>                                          | Stop AI generation
-<C-d>                                          | Select provider/model with default option
-<CR> (Enter)                                   | Create new line (prevents submission)
 --]]
 
 local M = {}
@@ -131,11 +121,11 @@ function M.setup()
     buf_map(0, "t", "<M-l>", "<Cmd>vertical resize -2<CR>", "Resize right")
     buf_map(0, "t", "<M-h>", "<Cmd>vertical resize +2<CR>", "Resize left")
 
-    -- Avante integration (only for non-lazygit buffers)
+    -- OpenCode integration (only for non-lazygit buffers)
     if vim.bo.filetype ~= "lazygit" then
-      buf_map(0, "t", "<C-a>", "<Cmd>AvanteAsk<CR>", "Ask Avante")
-      buf_map(0, "n", "<C-a>", "<Cmd>AvanteAsk<CR>", "Ask Avante")
-      buf_map(0, "v", "<C-a>", "<Cmd>AvanteAsk<CR>", "Ask Avante")
+      buf_map(0, "t", "<C-a>", "<Cmd>lua require('opencode').ask('@this: ', { submit = true })<CR>", "Ask OpenCode")
+      buf_map(0, "n", "<C-a>", "<Cmd>lua require('opencode').ask('@this: ', { submit = true })<CR>", "Ask OpenCode")
+      buf_map(0, "v", "<C-a>", "<Cmd>lua require('opencode').ask('@this: ', { submit = true })<CR>", "Ask OpenCode")
     end
   end
 
@@ -203,36 +193,6 @@ function M.setup()
       buf_map(0, "n", "<C-n>", "<cmd>lua IncrementCheckbox()<CR>", "Increment checkbox")
       buf_map(0, "n", "<A-n>", "<cmd>lua DecrementCheckbox()<CR>", "Decrement checkbox")
     end
-  end
-
-  -- Avante AI buffer mappings setup function triggered by an auto-command
-  function _G.set_avante_keymaps()
-    -- Helper for buffer-local Avante mappings
-    local function avante_map(mode, key, cmd, description)
-      buf_map(0, mode, key, cmd, description)
-    end
-
-    -- Toggle Avante interface
-    avante_map("n", "<C-t>", "<cmd>AvanteToggle<CR>", "Toggle Avante interface")
-    avante_map("i", "<C-t>", "<cmd>AvanteToggle<CR>", "Toggle Avante interface")
-    avante_map("n", "q", "<cmd>AvanteToggle<CR>", "Toggle Avante interface")
-
-    -- Reset/clear Avante content
-    avante_map("n", "<C-c>", "<cmd>AvanteClear history<CR>", "Clear chat history")
-    avante_map("i", "<C-c>", "<cmd>AvanteClear history<CR>", "Clear chat history")
-
-    -- Model and provider selection
-    avante_map("n", "<C-m>", "<cmd>AvanteModel<CR>", "Select model")
-    avante_map("i", "<C-m>", "<cmd>AvanteModel<CR>", "Select model")
-    avante_map("n", "<C-s>", "<cmd>AvanteProvider<CR>", "Select provider")
-    avante_map("i", "<C-s>", "<cmd>AvanteProvider<CR>", "Select provider")
-
-    -- Generation control
-    avante_map("n", "<C-x>", "<cmd>AvanteStop<CR>", "Stop generation")
-    avante_map("i", "<C-x>", "<cmd>AvanteStop<CR>", "Stop generation")
-
-    -- Prevent accidental submission
-    avante_map("i", "<CR>", "<CR>", "Create new line")
   end
 
   ---------------------------------

@@ -1,93 +1,33 @@
 # NeoVim Plugin Organization
 
-This directory contains plugin specifications and configurations managed by lazy.nvim.
+This directory contains plugin specs managed by `lazy.nvim`.
 
-## Organization Structure
+## Current Structure
 
-Plugins are organized into the following categories with dedicated directories:
+Plugins are grouped by responsibility:
 
-- **editor/**: Core editor capabilities
-  - telescope.lua: Fuzzy finder and navigation
-  - treesitter.lua: Syntax highlighting and code navigation
-  - toggleterm.lua: Terminal integration
-  - formatting.lua: Code formatting with conform.nvim
-  - linting.lua: Code linting with nvim-lint
-  - which-key.lua: Keybinding help popup
+- `editor/`: editing workflow and core UX
+  - `which-key.lua`, `formatting.lua`, `linting.lua`, `telescope.lua`, `toggleterm.lua`, `treesitter.lua`
+- `tools/`: external tools and utility plugins
+  - `gitsigns.lua`, `firenvim.lua`, `mini.lua`, `surround.lua`, `todo-comments.lua`, `yanky.lua`, `copilot.lua`, `opencode.lua`, `autolist/`, `snacks/`, `lazygit.lua`, `yazi.lua`
+- `text/`: writing and text-domain plugins
+  - `vimtex.lua`, `markdown-preview.lua`, `jupyter/`
+- `ui/`: visual interface components
+  - `colorscheme.lua`, `lualine.lua`, `bufferline.lua`, `nvim-tree.lua`, `nvim-web-devicons.lua`, `sessions.lua`
+- `typst/`: Typst-specific plugins
+  - `typst-preview.lua`, `typst-vim.lua`, `luasnip.lua`
+- `lsp/`: language server and completion stack
+  - `lspconfig.lua`, `mason.lua`, `none-ls.lua`, `nvim-cmp.lua`, `vimtex-cmp.lua`
 
-- **tools/**: External tool integration and text manipulation
-  - gitsigns.lua: Git integration
-  - firenvim.lua: Browser integration
-  - vimtex.lua: LaTeX integration
-  - lean.lua: Lean theorem prover integration
-  - markdown-preview.lua: Markdown preview
-  - autolist.lua: Smart list handling for markdown
-  - mini.lua: Mini plugins collection (pairs, comments, etc.)
-  - surround.lua: Text surrounding functionality
-  - todo-comments.lua: Highlight and search TODO comments
-  - yanky.lua: Enhanced yank and paste functionality
+## Loading Model
 
-- **lsp/**: Language server integration
-  - nvim-lspconfig: Base LSP configuration
-  - mason.nvim: LSP server management
-  - none-ls.lua: Additional LSP functionality
-  - nvim-cmp: Completion engine
-  - vimtex-cmp.lua: Completion for LaTeX
+- Each category has an `init.lua` that safely requires module specs and returns a plugin table.
+- `lua/neotex/bootstrap.lua` wires categories into `lazy.setup(...)` using category imports.
+- `lua/neotex/plugins/init.lua` intentionally returns `{}` as a compatibility shim.
 
-- **ui/**: User interface components
-  - colorscheme.lua: Theme configuration
-  - lualine.lua: Status line
-  - bufferline.lua: Buffer line
-  - nvim-tree.lua: File explorer
-  - nvim-web-devicons.lua: File icons
-  - sessions.lua: Session management
+## Adding a Plugin
 
-- **ai/**: AI tooling and integration
-  - avante.lua: AI assistants integration
-  - lectic.lua: AI-assisted writing
-  - mcp-hub.lua: AI tools integration
-
-## Plugin Structure
-
-Each plugin has its own configuration file in the appropriate category directory. A typical plugin specification follows this pattern:
-
-```lua
--- Example plugin configuration
-return {
-  "author/plugin-name",
-  dependencies = {
-    -- Dependencies listed here
-  },
-  config = function()
-    -- Configuration code
-  end,
-  -- Additional options
-}
-```
-
-## Plugin Loading
-
-Each category has its own `init.lua` file that:
-
-1. Loads all plugin specifications in that category
-2. Handles errors during plugin loading
-3. Returns a table of plugin specifications
-
-The main bootstrap.lua file then imports all categories using lazy.nvim's import mechanism.
-
-## Special Subdirectories
-
-- **lsp/**: Language server protocol related plugins
-- **jupyter/**: Jupyter notebook integration
-
-## Adding New Plugins
-
-To add a new plugin:
-
-1. Identify the appropriate category for the plugin
-2. Create a new file named after the plugin in that category's directory
-3. Write the plugin specification following the pattern above
-4. Add it to the category's `init.lua` file
-
-## Plugin Documentation
-
-For detailed information about specific plugins, refer to their individual files or visit their GitHub repositories.
+1. Place a plugin spec file in the correct category.
+2. Export a valid lazy.nvim spec table from that file.
+3. Register it via that category's `init.lua`.
+4. Restart Neovim and verify with `:Lazy` and `:checkhealth`.

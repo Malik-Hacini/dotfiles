@@ -83,19 +83,18 @@ GIT (<leader>g)                                 | DESCRIPTION
 ----------------------------------------------------------------------------------
 AI HELP (<leader>h)                             | DESCRIPTION
 ----------------------------------------------------------------------------------
-<leader>ha - Ask                                | Ask Avante AI a question
-<leader>hb - Build dependencies                 | Build deps for Avante project
-<leader>hc - Chat                               | Start chat with Avante AI
-<leader>hd - Set model & provider               | Change AI model with defaults
-<leader>he - Edit prompts                       | Open system prompt manager
-<leader>hi - Stop generation                    | Interrupt AI generation
-<leader>hk - Clear                              | Clear Avante chat/content
-<leader>hm - Select model                       | Choose AI model for current provider
-<leader>hM - Map repo                           | Create repo map for AI context
-<leader>hp - Select prompt                      | Choose a different system prompt
-<leader>hs - Selected edit                      | Edit selected text with AI
-<leader>hr - Refresh assistant                  | Reload AI assistant
-<leader>ht - Toggle assistant                   | Show/hide Avante interface
+<leader>ha - Ask opencode                       | Ask OpenCode with current context
+<leader>hc - OpenCode action                    | Run OpenCode action picker
+<leader>ht - Toggle opencode                    | Toggle OpenCode terminal
+<leader>he - Copilot enable                     | Enable Copilot suggestions
+<leader>hd - Copilot disable                    | Disable Copilot suggestions
+<leader>hs - Copilot status                     | Show Copilot status
+<leader>hp - Copilot panel                      | Open Copilot panel
+<leader>hn - Copilot next                       | Next Copilot suggestion
+<leader>hb - Copilot previous                   | Previous Copilot suggestion
+<leader>hl - Copilot line                       | Accept Copilot line
+<leader>hw - Copilot word                       | Accept Copilot word
+<leader>hx - Copilot dismiss                    | Dismiss Copilot suggestion
 
 ----------------------------------------------------------------------------------
 JUPYTER (<leader>j)                             | DESCRIPTION
@@ -409,25 +408,21 @@ return {
       },
       h = {
         name = "AI HELP",
-        -- Avante commands with MCPHub integration
-        a = { function() require("neotex.plugins.ai.util.avante_mcp").with_mcp("AvanteAsk") end, "ask" },
-        c = { function() require("neotex.plugins.ai.util.avante_mcp").with_mcp("AvanteChat") end, "chat" },
-        t = { function() require("neotex.plugins.ai.util.avante_mcp").with_mcp("AvanteToggle") end, "toggle" },
-        e = { function() require("neotex.plugins.ai.util.avante_mcp").with_mcp("AvanteEdit") end, "edit" },
+        -- OpenCode
+        a = { function() require("opencode").ask("@this: ", { submit = true }) end, "ask opencode" },
+        c = { function() require("opencode").select() end, "opencode action" },
+        t = { function() require("opencode").toggle() end, "toggle opencode" },
 
-        -- Direct MCPHub command
-        x = { "<cmd>MCPHubOpen<CR>", "open MCPHub" },
-
-        -- Standard Avante commands (don't need MCPHub)
-        b = { "<cmd>AvanteBuild<CR>", "build dependencies" },
-        d = { "<cmd>AvanteProvider<CR>", "set model & provider" },
-        i = { "<cmd>AvanteStop<CR>", "interrupt avante" },
-        k = { "<cmd>AvanteClear<CR>", "clear" },
-        m = { "<cmd>AvanteModel<CR>", "select model" },
-        M = { "<cmd>AvanteShowRepoMap<CR>", "map repo" },
-        p = { "<cmd>AvantePromptManager<CR>", "edit prompts" },
-        r = { "<cmd>AvanteRefresh<CR>", "refresh assistant" },
-        s = { "<cmd>AvantePrompt<CR>", "select prompt" },
+        -- Copilot controls
+        e = { "<cmd>Copilot enable<CR>", "copilot enable" },
+        d = { "<cmd>Copilot disable<CR>", "copilot disable" },
+        s = { "<cmd>Copilot status<CR>", "copilot status" },
+        p = { "<cmd>Copilot panel<CR>", "copilot panel" },
+        n = { function() require("copilot.suggestion").next() end, "copilot next" },
+        b = { function() require("copilot.suggestion").prev() end, "copilot prev" },
+        l = { function() require("copilot.suggestion").accept_line() end, "copilot line" },
+        w = { function() require("copilot.suggestion").accept_word() end, "copilot word" },
+        x = { function() require("copilot.suggestion").dismiss() end, "copilot dismiss" },
       },
       --   HARPOON
       --   a = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "mark" },

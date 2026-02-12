@@ -449,7 +449,7 @@ return {
         -- LSP operations
         b = { "<cmd>Telescope diagnostics bufnr=0<CR>", "buffer diagnostics" },
         c = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "code action" },
-        d = { "<cmd>Telescope lsp_definitions<CR>", "definition" },
+        d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "definition" },
         D = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "declaration" },
         h = { "<cmd>lua vim.lsp.buf.hover()<CR>", "help" },
         i = { "<cmd>Telescope lsp_implementations<CR>", "implementations" },

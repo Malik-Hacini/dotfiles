@@ -3,6 +3,16 @@
   "plugin": [
     "opencode-antigravity-auth@latest"
   ],
+  "mcp": {
+    "firecrawl": {
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "enabled": true,
+      "environment": {
+        "FIRECRAWL_API_KEY": "{file:~/.config/opencode/firecrawl_api_key}"
+      }
+    }
+  },
   "provider": {
     "google": {
       "models": {

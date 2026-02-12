@@ -4,6 +4,9 @@ install.log
 # Machine-specific local overrides (not tracked)
 **/local.conf
 
+# OpenCode local secrets (not tracked)
+**/firecrawl_api_key
+
 # OS files
 .DS_Store
 Thumbs.db

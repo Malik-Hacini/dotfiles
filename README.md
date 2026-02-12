@@ -121,6 +121,14 @@ Run `xrandr --listmonitors` to find your output names. i3 silently ignores the `
 
 The fish config conditionally adds `~/.opencode/bin` to PATH if it exists. Install from [opencode.ai](https://opencode.ai) if desired.
 
+For Firecrawl MCP, the API key is loaded from `~/.config/opencode/firecrawl_api_key` using OpenCode's `{file:...}` variable substitution. This file is ignored by git, so keep the secret there instead of in `opencode.json`.
+
+```bash
+mkdir -p ~/.config/opencode
+printf '%s' 'fc-your-key-here' > ~/.config/opencode/firecrawl_api_key
+chmod 600 ~/.config/opencode/firecrawl_api_key
+```
+
 ### Zotero Bibliography
 
 The Neovim config (telescope-bibtex) expects `~/texmf/bibtex/bib/Zotero.bib`. If you use Zotero for reference management, configure Better BibTeX to auto-export to this path.

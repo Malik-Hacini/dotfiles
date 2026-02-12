@@ -33,14 +33,11 @@ return {
         offsets = {
           {
             filetype = "NvimTree",
-            -- text = "Explorer",
-            text = function()
-              return vim.fn.getcwd()
-            end,
-            highlight = "BufferLineFill", -- Use BufferLineFill to match the background
+            text = "",
+            highlight = "BufferLineFill",
             text_align = "left",
-            separator = "", -- use a "true" to enable the default, or set your own character
-            -- padding = 1
+            separator = false,
+            padding = 0,
           }
         },
         hover = {

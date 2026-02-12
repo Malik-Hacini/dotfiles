@@ -195,26 +195,25 @@ SURROUND (<leader>s)                            | DESCRIPTION
 <leader>sf - Find surrounding                   | Find surrounding characters
 <leader>sh - Highlight surrounding              | Highlight surrounding characters
 
+TYPST (<leader>t)                               | DESCRIPTION
 ----------------------------------------------------------------------------------
-TEMPLATES (<leader>t)                           | DESCRIPTION
-----------------------------------------------------------------------------------
-<leader>tp - PhilPaper.tex                      | Insert philosophy paper template
-<leader>tl - Letter.tex                         | Insert letter template
-<leader>tg - Glossary.tex                       | Insert glossary template
-<leader>th - HandOut.tex                        | Insert handout template
-<leader>tb - PhilBeamer.tex                     | Insert beamer presentation
-<leader>ts - SubFile.tex                        | Insert subfile template
-<leader>tr - Root.tex                           | Insert root document template
-<leader>tm - MultipleAnswer.tex                 | Insert multiple answer template
+<leader>to - TypstPreview                       | Start Typst preview
+<leader>tp - TypstPreviewToggle                 | Toggle Typst preview
+<leader>ts - TypstPreviewStop                   | Stop Typst preview
+<leader>tf - TypstPreviewFollowCursorToggle     | Toggle cursor follow
+<leader>tw - TypstWatch                         | Watch and recompile Typst
 
 ----------------------------------------------------------------------------------
-TODO (<leader>tt)                               | DESCRIPTION
+TEMPLATES (<leader>T)                           | DESCRIPTION
 ----------------------------------------------------------------------------------
-<leader>tt - Todo telescope                     | Find all TODOs in project
-<leader>tn - Next todo                          | Jump to next TODO comment
-<leader>tp - Previous todo                      | Jump to previous TODO comment
-<leader>tl - Todo location list                 | Show TODOs in location list
-<leader>tq - Todo quickfix                      | Show TODOs in quickfix list
+<leader>Tp - PhilPaper.tex                      | Insert philosophy paper template
+<leader>Tl - Letter.tex                         | Insert letter template
+<leader>Tg - Glossary.tex                       | Insert glossary template
+<leader>Th - HandOut.tex                        | Insert handout template
+<leader>Tb - PhilBeamer.tex                     | Insert beamer presentation
+<leader>Ts - SubFile.tex                        | Insert subfile template
+<leader>Tr - Root.tex                           | Insert root document template
+<leader>Tm - MultipleAnswer.tex                 | Insert multiple answer template
 
 ----------------------------------------------------------------------------------
 TEXT (<leader>x)                     | DESCRIPTION
@@ -523,6 +522,14 @@ return {
         c = { "<Plug>(nvim-surround-change)", "change" },
       },
       t = {
+        name = "TYPST",
+        o = { "<cmd>TypstPreview<CR>", "TypstPreview" },
+        p = { "<cmd>TypstPreviewToggle<CR>", "TypstPreviewToggle" },
+        s = { "<cmd>TypstPreviewStop<CR>", "TypstPreviewStop" },
+        f = { "<cmd>TypstPreviewFollowCursorToggle<CR>", "TypstPreviewFollowCursorToggle" },
+        w = { "<cmd>TypstWatch<CR>", "TypstWatch" },
+      },
+      T = {
         name = "TEMPLATES",
         p = {
           "<cmd>read ~/.config/nvim/templates/PhilPaper.tex<CR>",
@@ -592,6 +599,7 @@ return {
       ["RUN"] = "󰐊 ",
       ["SESSIONS"] = "󰆔 ",
       ["SURROUND"] = "󰅪 ",
+      ["TYPST"] = "󰈭 ",
       ["TEMPLATES"] = "󰈭 ",
       ["TEXT"] = "󰊪 ",
       ["YANK"] = "󰆏 ",

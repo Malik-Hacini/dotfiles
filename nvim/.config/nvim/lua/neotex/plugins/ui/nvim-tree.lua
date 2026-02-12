@@ -690,11 +690,7 @@ return {
           -- =================== ROOT PATH STYLING ===================
           -- For the top text showing the current directory
 
-          -- Set BufferLineFill highlight explicitly for the offset text
-          vim.api.nvim_set_hl(0, "BufferLineFill", {
-            fg = get_highlight_fg("Directory") or hex_fg_color,
-            bg = hex_bg_color
-          })
+          -- BufferLineFill is set later alongside NvimTreeNormal to use tree_bg (mantle)
 
           -- Override Directory highlight to use our bufferline background
           vim.api.nvim_set_hl(0, "Directory", {
@@ -844,6 +840,8 @@ return {
             vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = tree_bg })
             vim.api.nvim_set_hl(0, "NvimTreeWinSeparator", { fg = tree_sep, bg = tree_bg })
             vim.api.nvim_set_hl(0, "NvimTreeCursorLine", { bg = cursorline_bg })
+            -- Match the bufferline offset area to nvim-tree background
+            vim.api.nvim_set_hl(0, "BufferLineFill", { bg = tree_bg })
           end
 
           -- We no longer need to log styling information

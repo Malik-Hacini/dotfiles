@@ -123,17 +123,8 @@ return {
         ["<leader>ft"] = { "<cmd>TodoTelescope<CR>", "todos" },
       })
 
-      which_key.register({
-        t = {
-          name = "TODO",
-          t = { "<cmd>TodoTelescope<CR>", "todos" },
-          n = { function() require("todo-comments").jump_next() end, "next todo" },
-          p = { function() require("todo-comments").jump_prev() end, "previous todo" },
-          l = { "<cmd>TodoLocList<CR>", "todo location list" },
-          q = { "<cmd>TodoQuickFix<CR>", "todo quickfix" },
-        },
-      }, { prefix = "<leader>" })
+      -- Keep TODO actions out of <leader>t so that group can stay Typst-focused.
+      -- TODO commands remain available via <leader>ft, ]t, and [t.
     end
   end,
 }
-

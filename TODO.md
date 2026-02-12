@@ -1,0 +1,2 @@
+- cleanup nvim config (still a mess, remove mini.ai, fix the docs, etc)
+- chore : add license, update readme

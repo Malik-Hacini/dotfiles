@@ -824,9 +824,26 @@ return {
               normal_hex_bg = normal_bg
             end
 
-            -- Set NvimTree's main background to match the editor
-            vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = normal_hex_bg })
-            vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = normal_hex_bg })
+            -- Make explorer background darker than file buffers using Catppuccin Mocha shades.
+            local tree_bg = normal_hex_bg
+            local tree_sep = normal_hex_bg
+            local cursorline_bg = normal_hex_bg
+
+            local ok_palette, palette = pcall(function()
+              return require("catppuccin.palettes").get_palette("mocha")
+            end)
+
+            if ok_palette and palette then
+              tree_bg = palette.mantle or normal_hex_bg
+              tree_sep = palette.surface1 or tree_bg
+              cursorline_bg = palette.surface0 or tree_bg
+            end
+
+            vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = tree_bg })
+            vim.api.nvim_set_hl(0, "NvimTreeNormalNC", { bg = tree_bg })
+            vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = tree_bg })
+            vim.api.nvim_set_hl(0, "NvimTreeWinSeparator", { fg = tree_sep, bg = tree_bg })
+            vim.api.nvim_set_hl(0, "NvimTreeCursorLine", { bg = cursorline_bg })
           end
 
           -- We no longer need to log styling information

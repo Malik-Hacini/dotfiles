@@ -1,27 +1,18 @@
-# Tool Integration Plugins
+# Tool Plugins
 
-This directory contains plugins that enhance the editing experience with additional tools and functionality:
+This directory hosts integrations and utility plugins that extend core editing.
 
-## External Tool Integration
-- Git integration (gitsigns)
-- Browser integration (firenvim)
-- UI and UX enhancements (snacks)
+## Major Areas
 
-## Text Manipulation Tools
-- Enhanced yank and paste functionality (yanky)
-- Text surrounding and brackets (surround)
-- Mini plugins collection (pairs, comments, etc.)
-- Smart list handling for markdown (autolist)
-- TODO comments highlighting and navigation (todo-comments)
+- Git: `gitsigns.lua`, `lazygit.lua`
+- AI: `opencode.lua`, `copilot.lua`
+- File navigation helpers: `yazi.lua`
+- Text utilities: `mini.lua`, `surround.lua`, `todo-comments.lua`, `yanky.lua`, `autolist/`
+- UI utility suite: `snacks/`
+- Browser embedding: `firenvim.lua`
 
-## UI Enhancement Tools
-- Dashboard and startup screen (snacks)
-- Git blame and lazygit integration (snacks)
-- Status column with enhanced information (snacks)
-- Terminal integration (snacks)
-- Window management utilities (snacks)
-- Notification system (snacks)
+## Notes
 
-These tools provide specialized functionality that extends the core editor capabilities with focused, purpose-built features.
-
-Part of Phase 2 implementation.
+- LazyGit integration is handled by `lazygit.nvim`.
+- Snacks is used for dashboard/notifier/statuscolumn/input/terminal helpers, but not for LazyGit.
+- Keep tool specs small and composable; avoid putting large editor-flow logic here.

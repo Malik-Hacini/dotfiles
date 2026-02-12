@@ -1,52 +1,25 @@
-# Core Configuration
+# Core Config Modules
 
-This directory contains the core configuration modules for NeoVim.
+This directory contains the startup configuration chain loaded by `neotex.config`.
 
-## Module Structure
+## Files
 
-- **init.lua**: Main loader that initializes all configuration modules
-- **options.lua**: Core Vim/NeoVim options (tab settings, line numbers, etc.)
-- **keymaps.lua**: Key mappings for different modes
-- **autocmds.lua**: Autocommands for different events
+- `init.lua`: calls `options.setup()`, `keymaps.setup()`, `autocmds.setup()` in order
+- `options.lua`: base Neovim options and startup defaults
+- `keymaps.lua`: global and buffer-local mappings
+- `autocmds.lua`: event-driven behavior (terminal, markdown, notebook helpers, buffer behavior)
 
-## Options (options.lua)
+## Design Notes
 
-The options module sets up various Vim and NeoVim options to create a better editing experience:
+- Keep startup-safe defaults in `options.lua`.
+- Put reusable logic in `lua/neotex/util/*`, not directly in keymap callbacks.
+- Use `pcall(require, ...)` for optional integrations.
+- Avoid filetype-specific complexity in `config/*`; prefer `after/ftplugin/*`.
 
-- UI options (line numbers, cursor, colors)
-- Editing behavior (tab settings, indentation)
-- Search behavior
-- Clipboard integration
-- Split behavior
-- Backup and file handling
-
-## Keymaps (keymaps.lua)
-
-The keymaps module defines key mappings for various operations:
-
-- Navigation (buffer switching, window movement)
-- Editing operations (format, search/replace)
-- Plugin-specific mappings
-- Custom command shortcuts
-
-## Autocommands (autocmds.lua)
-
-The autocommands module sets up automatic behaviors for different events:
-
-- Filetype-specific settings
-- Terminal behavior
-- Cursor position restoration
-- Auto-formatting on save
-- Auto-reload files changed outside Vim
-
-## Usage
-
-These configuration modules are loaded automatically during startup. You can also manually reload them:
+## Common Reload Path
 
 ```lua
--- Reload all configuration
 require("neotex.config").setup()
-
--- Or reload a specific module
-require("neotex.config.options").setup()
 ```
+
+In practice, use `:ReloadConfig` (`<leader>rr`) during interactive edits.

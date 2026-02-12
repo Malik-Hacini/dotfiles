@@ -1,11 +1,11 @@
-# Extra Feature Plugins
+# Deprecated Extras
 
-This directory contains optional plugins that add specialized functionality:
+This directory is archival.
 
-- Language-specific utilities
-- Workflow optimizations
-- todo-comments.nvim
-- conform.nvim for formatting
-- nvim-lint for linting
+Files here are kept for reference only and are not part of the active NeoTex load path.
 
-Part of Phase 2 implementation.
+If functionality is needed, use the maintained plugin specs under:
+
+- `lua/neotex/plugins/editor/`
+- `lua/neotex/plugins/tools/`
+- `lua/neotex/plugins/lsp/`

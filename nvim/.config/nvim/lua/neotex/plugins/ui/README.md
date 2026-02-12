@@ -1,13 +1,14 @@
-# UI Enhancement Plugins
+# UI Plugins
 
-This directory contains plugins that improve the user interface:
+This directory contains interface-layer plugins.
 
-- Status line configuration (lualine)
-- Tab and buffer line enhancements (bufferline)
-- UI components and notifications
-- Visual themes and styling (colorscheme)
-- File explorer and navigation (nvim-tree)
-- File icons (nvim-web-devicons)
-- Session management (sessions)
+## Included Specs
 
-Part of Phase 2 implementation.
+- `colorscheme.lua`: Catppuccin theme setup
+- `lualine.lua`: statusline
+- `bufferline.lua`: buffer/tab line behavior
+- `nvim-tree.lua`: file explorer
+- `nvim-web-devicons.lua`: icon provider
+- `sessions.lua`: session persistence and restore flow
+
+UI plugins should avoid owning core editor logic; keep behavior-oriented workflows in `editor/` or `tools/`.

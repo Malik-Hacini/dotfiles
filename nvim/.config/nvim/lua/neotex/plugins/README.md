@@ -1,33 +1,30 @@
-# NeoVim Plugin Organization
+# Plugin Layout
 
-This directory contains plugin specs managed by `lazy.nvim`.
+Plugin specs are organized by domain and loaded through lazy.nvim category imports.
 
-## Current Structure
+## Categories
 
-Plugins are grouped by responsibility:
-
-- `editor/`: editing workflow and core UX
+- `editor/`: core editing workflow
   - `which-key.lua`, `formatting.lua`, `linting.lua`, `telescope.lua`, `toggleterm.lua`, `treesitter.lua`
-- `tools/`: external tools and utility plugins
-  - `gitsigns.lua`, `firenvim.lua`, `mini.lua`, `surround.lua`, `todo-comments.lua`, `yanky.lua`, `copilot.lua`, `opencode.lua`, `autolist/`, `snacks/`, `lazygit.lua`, `yazi.lua`
-- `text/`: writing and text-domain plugins
-  - `vimtex.lua`, `markdown-preview.lua`, `jupyter/`
-- `ui/`: visual interface components
-  - `colorscheme.lua`, `lualine.lua`, `bufferline.lua`, `nvim-tree.lua`, `nvim-web-devicons.lua`, `sessions.lua`
-- `typst/`: Typst-specific plugins
-  - `typst-preview.lua`, `typst-vim.lua`, `luasnip.lua`
-- `lsp/`: language server and completion stack
+- `lsp/`: LSP/completion and external tool management
   - `lspconfig.lua`, `mason.lua`, `none-ls.lua`, `nvim-cmp.lua`, `vimtex-cmp.lua`
+- `tools/`: utility and integration plugins
+  - git (`gitsigns.lua`, `lazygit.lua`), AI (`opencode.lua`, `copilot.lua`), file tools (`yazi.lua`), editor helpers (`mini.lua`, `surround.lua`, `todo-comments.lua`, `yanky.lua`, `autolist/`, `snacks/`, `firenvim.lua`)
+- `text/`: writing-focused plugins
+  - `vimtex.lua`, `markdown-preview.lua`, `jupyter/`
+- `ui/`: visual shell around editing
+  - `colorscheme.lua`, `lualine.lua`, `bufferline.lua`, `nvim-tree.lua`, `nvim-web-devicons.lua`, `sessions.lua`
+- `typst/`: Typst support
+  - `typst-preview.lua`, `typst-vim.lua`, `luasnip.lua`
 
 ## Loading Model
 
-- Each category has an `init.lua` that safely requires module specs and returns a plugin table.
-- `lua/neotex/bootstrap.lua` wires categories into `lazy.setup(...)` using category imports.
-- `lua/neotex/plugins/init.lua` intentionally returns `{}` as a compatibility shim.
+- Each category has an `init.lua` aggregator.
+- `lua/neotex/bootstrap.lua` imports category modules into `lazy.setup(...)`.
+- `lua/neotex/plugins/init.lua` remains a compatibility shim returning `{}`.
 
-## Adding a Plugin
+## Notes
 
-1. Place a plugin spec file in the correct category.
-2. Export a valid lazy.nvim spec table from that file.
-3. Register it via that category's `init.lua`.
-4. Restart Neovim and verify with `:Lazy` and `:checkhealth`.
+- `lazygit.nvim` is the active LazyGit integration.
+- Snacks' `lazygit` module is intentionally disabled to avoid overlap.
+- `nvim-tree` and `yazi` are both kept intentionally for different file-navigation workflows.

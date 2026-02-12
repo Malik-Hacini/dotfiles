@@ -7,7 +7,8 @@ Config name: NeoTex
 
 This is a NeoVim configuration focused on academic writing (LaTeX, Typst, Markdown),
 Python development, Jupyter notebooks, and Lua plugin development. It runs on NixOS and
-uses lazy.nvim for plugin management.
+uses lazy.nvim for plugin management. AI workflows are built around OpenCode + Copilot
+plus Lectic utilities for writing workflows.
 
 ## Build / Lint / Test Commands
 
@@ -26,8 +27,9 @@ There is no traditional build system. This is a NeoVim Lua configuration managed
 - `<leader>lL` - Lint current file (same, under LSP group)
 - Auto-lints on `BufWritePost`/`BufEnter` for: python, lua, javascript, typescript
 - `:LintToggle` / `:LintToggle buffer` - Toggle auto-linting globally or per-buffer
-- Linters: eslint (JS/TS), pylint (Python), luacheck (Lua), shellcheck (sh),
-  markdownlint, cppcheck (C/C++), stylelint (CSS), tidy (HTML), jsonlint, yamllint
+- Linters: eslint/eslint_d (JS/TS), pylint (Python), luacheck/selene (Lua),
+  shellcheck (sh), markdownlint, cppcheck/cpplint (C/C++), stylelint (CSS),
+  tidy/htmlhint (HTML), jsonlint, yamllint
 - Only linters found on `$PATH` are activated (checked via `vim.fn.executable`)
 
 ### Formatting
@@ -56,7 +58,7 @@ There is no traditional build system. This is a NeoVim Lua configuration managed
 
 ### Testing
 - No test framework is configured for this NeoVim config itself.
-- For Python files edited in this NeoVim: run via `<leader>ap` (TermExec python)
+- For Python files edited in this NeoVim: run via `<leader>ap` (TermExec python3)
 - For Jupyter: `<leader>je` execute cell, `<leader>jn` execute and next, `<leader>ja` run all
 
 ### Performance Profiling
@@ -80,7 +82,7 @@ lua/neotex/
     editor/                       Formatting, linting, telescope, toggleterm, treesitter, which-key
     lsp/                          lspconfig, mason, none-ls, nvim-cmp, vimtex-cmp
     tools/                        gitsigns, firenvim, lazygit, mini, surround, todo-comments,
-                                  yanky, yazi, snacks (dashboard/notifier/git), autolist
+                                  yanky, yazi, snacks, autolist, opencode, copilot
     text/                         vimtex, markdown-preview, jupyter (jupytext, iron, notebook-navigator)
     ui/                           catppuccin theme, bufferline, lualine, nvim-tree, sessions
     typst/                        typst-preview, typst.vim, typst-specific LuaSnip config
@@ -98,7 +100,7 @@ after/ftdetect/                   ipynb.lua (Jupyter notebook detection)
 LuaSnip/                          Lua-based snippets: all.lua, lua.lua, typst.lua
 snippets/                         Snipmate-format: tex.snippets, markdown.snippets, python.snippets
 templates/                        LaTeX document templates
-scripts/                          Shell/Lua maintenance scripts (MCP-Hub, plugin checks)
+  scripts/                          Shell/Lua maintenance scripts (plugin/tool checks)
 ```
 
 ## Bootstrap Chain

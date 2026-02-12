@@ -4,25 +4,13 @@ return {
   ft = { "python", "html", "javascript", "typescript", "lua" },
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    "jay-babu/mason-null-ls.nvim",
     "williamboman/mason.nvim",
   },
   config = function()
-    local mason_null_ls = require("mason-null-ls")
-    mason_null_ls.setup({
-      ensure_installed = {
-        "stylua",   -- lua formatter
-        "isort",    -- python formatter
-        "black",    -- python formatter
-        "pylint",   -- python linter (used by nvim-lint, not none-ls)
-      },
-      automatic_installation = true,
-      handlers = {
-        -- Prevent mason-null-ls from auto-registering pylint diagnostics;
-        -- pylint is handled by nvim-lint instead
-        pylint = function() end,
-      },
-    })
+    if vim.g._neotex_null_ls_setup then
+      return
+    end
+    vim.g._neotex_null_ls_setup = true
 
     local null_ls = require("null-ls")
     local null_ls_utils = require("null-ls.utils")

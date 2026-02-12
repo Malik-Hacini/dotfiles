@@ -9,11 +9,17 @@ return {
       "echasnovski/mini.comment",
     },
     config = function()
+      local jupytext_cmd = "jupytext"
+      local mason_jupytext = vim.fn.stdpath("data") .. "/mason/bin/jupytext"
+      if vim.fn.executable(jupytext_cmd) ~= 1 and vim.fn.executable(mason_jupytext) == 1 then
+        jupytext_cmd = mason_jupytext
+      end
+
       require("jupytext").setup({
         style = "markdown",      -- or "python"
         output_extension = "md", -- or "py"
         -- Command to use for converting (defaults to jupytext in PATH)
-        command = "jupytext",
+        command = jupytext_cmd,
       })
     end,
   },

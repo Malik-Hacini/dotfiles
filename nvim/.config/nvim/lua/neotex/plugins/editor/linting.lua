@@ -36,6 +36,12 @@ return {
       lint.linters_by_ft.javascriptreact = { "eslint" }
       lint.linters_by_ft.typescriptreact = { "eslint" }
       lint.linters_by_ft.vue = { "eslint" }
+    elseif is_executable("eslint_d") then
+      lint.linters_by_ft.javascript = { "eslint_d" }
+      lint.linters_by_ft.typescript = { "eslint_d" }
+      lint.linters_by_ft.javascriptreact = { "eslint_d" }
+      lint.linters_by_ft.typescriptreact = { "eslint_d" }
+      lint.linters_by_ft.vue = { "eslint_d" }
     end
     
     if is_executable("stylelint") then
@@ -44,6 +50,8 @@ return {
     
     if is_executable("tidy") then
       lint.linters_by_ft.html = { "tidy" }
+    elseif is_executable("htmlhint") then
+      lint.linters_by_ft.html = { "htmlhint" }
     end
     
     if is_executable("jsonlint") then
@@ -62,6 +70,8 @@ return {
     -- Lua
     if is_executable("luacheck") then
       lint.linters_by_ft.lua = { "luacheck" }
+    elseif is_executable("selene") then
+      lint.linters_by_ft.lua = { "selene" }
     end
     
     -- Shell scripting
@@ -84,6 +94,9 @@ return {
     if is_executable("cppcheck") then
       lint.linters_by_ft.c = { "cppcheck" }
       lint.linters_by_ft.cpp = { "cppcheck" }
+    elseif is_executable("cpplint") then
+      lint.linters_by_ft.c = { "cpplint" }
+      lint.linters_by_ft.cpp = { "cpplint" }
     end
     
     -- Configure linter options only for available linters
@@ -137,7 +150,16 @@ return {
       if is_git_repo and vim.fn.glob(".eslintrc*") ~= "" then
         -- Use ESLint for all JavaScript-like files in this repository
         if vim.bo.filetype:match("javascript") or vim.bo.filetype:match("typescript") then
-          lint.try_lint("eslint")
+          if is_executable("eslint") then
+            lint.try_lint("eslint")
+            return
+          end
+
+          if is_executable("eslint_d") then
+            lint.try_lint("eslint_d")
+            return
+          end
+
           return
         end
       end

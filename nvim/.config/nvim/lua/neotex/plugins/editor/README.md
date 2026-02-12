@@ -1,25 +1,16 @@
-# Editor Enhancement Plugins
+# Editor Plugins
 
-This directory contains plugins that improve the core editing experience:
+Specs in this directory define the core editing experience.
 
-## Core Editor Enhancements
-- Navigation plugins (telescope, treesitter)
-- Visual enhancements (which-key)
-- Terminal integration (toggleterm)
-- Text formatting and linting
-- Code formatting utilities
+## Included Specs
 
-## Note on Module Organization
+- `which-key.lua`: leader menus and grouped keybinding UX
+- `formatting.lua`: conform.nvim formatter orchestration
+- `linting.lua`: nvim-lint setup with executable-aware fallback logic
+- `telescope.lua`: fuzzy search/navigation pickers
+- `toggleterm.lua`: terminal integration and TermExec workflow
+- `treesitter.lua`: syntax/tree support and related modules
 
-Several plugins previously in this directory have been moved:
+## Scope Rule
 
-- Text manipulation utilities (yanky) → tools
-- Mini ecosystem plugins (pairs, comments, etc.) → tools
-- Code manipulation tools (surround) → tools
-- Markdown list handling (autolist) → tools
-- Todo comments highlighting → tools
-- Session management → ui
-
-This organization better reflects the functional categorization of these plugins.
-
-Part of Phase 2 implementation.
+If a plugin is primarily an integration or utility (AI, git wrappers, yank history, file manager wrappers), place it under `tools/` instead of `editor/`.

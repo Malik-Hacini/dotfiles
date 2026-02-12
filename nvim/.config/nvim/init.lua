@@ -21,10 +21,20 @@ vim.notify_level = vim.log.levels.INFO
 -- This is critical and must happen first
 vim.g.mapleader = " " -- Space as leader key
 
+-- Ensure legacy netrw augroup exists to avoid noisy startup errors
+-- from plugins that clear `FileExplorer` autocmds conditionally.
+pcall(vim.api.nvim_create_augroup, "FileExplorer", { clear = true })
+
 -- Use the Nix-installed MCP-Hub binary if available
 local mcp_hub_path = os.getenv("MCP_HUB_PATH")
 if mcp_hub_path then
   vim.g.mcp_hub_path = mcp_hub_path
+end
+
+-- Ensure Mason-installed tools are visible across the whole config.
+local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+if vim.fn.isdirectory(mason_bin) == 1 then
+  vim.env.PATH = mason_bin .. ":" .. vim.env.PATH
 end
 
 -- Load configuration with improved error handling

@@ -1,24 +1,22 @@
-# Snacks Plugins
+# Snacks Configuration
 
-This directory contains the configuration for snacks.nvim, a collection of useful utilities and UI enhancements for Neovim.
+Snacks provides selected utility/UI modules for NeoTex.
 
-## Components
+## Files
 
-- **dashboard.lua**: Dashboard configuration for the startup screen
-- **init.lua**: Main snacks.nvim configuration and setup
+- `init.lua`: module enablement and shared options
+- `dashboard.lua`: startup dashboard sections/preset
+- `utils.lua`: helper wrappers used by keymaps
 
-## Features
+## Enabled Usage
 
-The snacks.nvim plugin provides:
+- dashboard
+- notifier/notify history
+- statuscolumn
+- input + window helpers
+- terminal helpers
+- git-related utilities (non-LazyGit)
 
-- Dashboard with custom sections and shortcuts
-- Git integration functionality
-- Improved statuscolumn with Git signs
-- Terminal integration
-- Window management tools
-- Notification system
-- Input dialog enhancements
-- File deletion handling
-- And more utilities
+## Explicitly Disabled
 
-These components enhance the overall Neovim experience with polished UI elements and quality-of-life improvements.
+- `snacks.lazygit` is disabled to avoid overlap with `lazygit.nvim`.

@@ -1,6 +1,7 @@
 return {
   "williamboman/mason.nvim",
-  ft ={ "py", "html", "js", "ts", "lua" },
+  event = { "BufReadPre", "BufNewFile" },
+  cmd = { "Mason", "MasonInstall", "MasonUpdate", "MasonUninstall" },
   dependencies = {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -28,21 +29,16 @@ return {
     })
 
     mason_lspconfig.setup({
-      -- list of servers for mason to install
-     ensure_installed = {
-        -- "html",
-        -- "emmet_ls",
-       -- "pyright",
-        -- "tsserver",
-        -- "lua_ls",   -- seems to cause trouble
-        -- "cssls",
-        -- "tailwindcss",
-        -- "svelte"
-        -- "graphql",
-        -- "prismals",
+      -- Keep the LSP server set explicit and predictable.
+      ensure_installed = {
+        "pyright",
+        "texlab",
+        "tinymist",
+        "lua_ls",
       },
-      -- auto-install configured servers (with lspconfig)
-      automatic_installation = true, -- not the same as ensure_installed
+      -- Avoid auto-enabling unexpected servers.
+      automatic_installation = false,
+      automatic_enable = { "pyright", "texlab", "tinymist", "lua_ls" },
       handlers = {
         -- Default handler: only enable servers we explicitly configure in lspconfig.
         -- This prevents Mason-installed formatters/linters (stylua, black, etc.)
@@ -63,12 +59,34 @@ return {
 
     mason_tool_installer.setup({
       ensure_installed = {
-        -- "prettier", -- prettier formatter seems to be required
-        "stylua",   -- lua formatter
-        "isort",    -- python formatter
-        "black",    -- python formatter
-        "pylint",   -- python linter
-        -- "eslint_d", -- js linter
+        -- LSP servers
+        "pyright",
+        "texlab",
+        "tinymist",
+        "lua-language-server",
+
+        -- Formatters
+        "stylua",
+        "isort",
+        "black",
+        "prettier",
+        "clang-format",
+        "shfmt",
+
+        -- Linters / diagnostics tools
+        "pylint",
+        "eslint_d",
+        "stylelint",
+        "jsonlint",
+        "yamllint",
+        "markdownlint",
+        "shellcheck",
+        "selene",
+        "htmlhint",
+        "cpplint",
+
+        -- Notebook tooling
+        "jupytext",
       },
     })
   end,

@@ -37,8 +37,6 @@ ACTIONS (<leader>a)                             | DESCRIPTION
 <leader>ag - Edit glossary                      | Open LaTeX glossary template
 <leader>ah - Toggle local highlight             | Highlight current word occurrences
 <leader>ak - Clean VimTex aux files             | Remove LaTeX auxiliary files
-<leader>al - Toggle Lean info view              | Show/hide Lean information panel
-<leader>am - Run model checker                  | Execute model checker on file
 <leader>ap - Run Python file                    | Execute current Python file
 <leader>ar - Recalculate autolist               | Fix numbering in lists
 <leader>at - Format tex file                    | Format LaTeX using latexindent
@@ -168,19 +166,6 @@ SESSIONS (<leader>S)                            | DESCRIPTION
 <leader>Sd - Delete session                     | Delete a saved session
 <leader>Sl - Load session                       | Load a saved session
 
-----------------------------------------------------------------------------------
-NIXOS (<leader>n)                               | DESCRIPTION
-----------------------------------------------------------------------------------
-<leader>nd - Nix develop                        | Enter nix development shell
-<leader>nf - Rebuild flake                      | Rebuild system from flake
-<leader>ng - Garbage collection                 | Clean up old nix packages (15d)
-<leader>np - Browse packages                    | Open nixOS packages website
-<leader>nm - MyNixOS                            | Open MyNixOS website
-<leader>nh - Home-manager switch                | Apply home-manager changes
-<leader>nr - Rebuild nix                        | Run update.sh script
-<leader>nu - Update flake                       | Update flake dependencies
-
-----------------------------------------------------------------------------------
 PANDOC (<leader>p)                              | DESCRIPTION
 ----------------------------------------------------------------------------------
 <leader>pw - Convert to Word                    | Convert to .docx format
@@ -352,12 +337,7 @@ return {
         -- h = { "<cmd>lua _HTOP_TOGGLE()<CR>", "htop" },
         h = { "<cmd>LocalHighlightToggle<CR>", "highlight" },
         k = { "<cmd>VimtexClean<CR>", "kill aux" },
-        l = { "<cmd>LeanInfoviewToggle<CR>", "lean info" },
-        -- l = { "<cmd>lua vim.g.cmptoggle = not vim.g.cmptoggle<CR>", "LSP" },
-        m = { "<cmd>TermExec cmd='./Code/dev_cli.py %:p:r.py'<CR>", "model checker" },
-        -- m = { "<cmd>TermExec cmd='python3 -m src.model_checker.cli %:p:r.py'<CR>", "model checker" },
-        -- m = { "<cmd>TermExec cmd='cd /home/benjamin/Documents/Philosophy/Projects/ModelChecker/Code && python3 -m src.model_checker.cli %:p:r.py'<CR>", "model checker" },
-        p = { "<cmd>TermExec cmd='python %:p:r.py'<CR>", "python" },
+        p = { "<cmd>TermExec cmd='python3 %:p:r.py'<CR>", "python" },
         r = { "<cmd>AutolistRecalculate<CR>", "reorder list" },
         t = { "<cmd>terminal latexindent -w %:p:r.tex<CR>", "tex format" },
         u = { "<cmd>cd %:p:h | NvimTreeRefresh | NvimTreeFindFile<CR>", "update cwd" },
@@ -513,22 +493,6 @@ return {
         d = { "<cmd>SessionManager delete_session<CR>", "delete" },
         l = { "<cmd>SessionManager load_session<CR>", "load" },
       },
-      n = {
-        name = "NIXOS",
-        d = { "<cmd>TermExec cmd='nix develop'<CR><C-w>j", "develop" },
-        -- f = { "<cmd>TermExec cmd='sudo nixos-rebuild switch --flake ~/.config/nixos/'<CR><C-w>j", "flake" },
-        f = { "<cmd>TermExec cmd='sudo nixos-rebuild switch --flake ~/.dotfiles/'<CR><C-w>l", "rebuild flake" },
-        g = { "<cmd>TermExec cmd='nix-collect-garbage --delete-older-than 15d'<CR><C-w>j", "garbage" },
-        -- g = { "<cmd>TermExec cmd='nix-collect-garbage -d'<CR><C-w>j", "garbage" },
-        p = { "<cmd>TermExec cmd='brave https://search.nixos.org/packages' open=0<CR>", "packages" },
-        m = { "<cmd>TermExec cmd='brave https://mynixos.com' open=0<CR>", "my-nixos" },
-        h = { "<cmd>TermExec cmd='home-manager switch --flake ~/.dotfiles/'<CR><C-w>l", "home-manager" },
-        r = { "<cmd>TermExec cmd='~/.dotfiles/update.sh'<CR><C-w>l", "rebuild nix" },
-        -- r = { "<cmd>TermExec cmd='home-manager switch'<CR><C-w>j", "home rebuild" },
-        -- r = { "<cmd>TermExec cmd='sudo nixos-rebuild switch --flake ~/.config/home-manager/#nandi'<CR><C-w>j", "home rebuild" },
-        -- r = { "<cmd>TermExec cmd='home-manager switch --flake ~/.config/home-manager/'<CR><C-w>j", "rebuild" },
-        u = { "<cmd>TermExec cmd='nix flake update'<CR><C-w>j", "update" },
-      },
       p = {
         name = "PANDOC",
         w = { "<cmd>TermExec cmd='pandoc %:p -o %:p:r.docx'<CR>", "word" },
@@ -624,7 +588,6 @@ return {
       ["LIST"] = "󰔱 ",
       ["LSP & LINT"] = "󰒕 ",
       ["MARKDOWN"] = "󱀈 ",
-      ["NIXOS"] = "󱄅 ",
       ["PANDOC"] = "󰈙 ",
       ["RUN"] = "󰐊 ",
       ["SESSIONS"] = "󰆔 ",

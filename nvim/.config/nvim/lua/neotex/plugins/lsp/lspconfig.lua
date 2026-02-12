@@ -10,13 +10,34 @@ return {
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     local default = cmp_nvim_lsp.default_capabilities()
 
-    -- Helper: only enable an LSP server if its binary is on PATH
-    local function enable_if_executable(server_name, cmd)
-      cmd = cmd or server_name
+    -- Ensure Mason binaries are available to executable checks and LSP cmd lookup.
+    local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+    if vim.fn.isdirectory(mason_bin) == 1 then
+      vim.env.PATH = mason_bin .. ":" .. vim.env.PATH
+    end
+
+    local function resolve_executable(cmd)
       if vim.fn.executable(cmd) == 1 then
+        return cmd
+      end
+
+      local mason_cmd = mason_bin .. "/" .. cmd
+      if vim.fn.executable(mason_cmd) == 1 then
+        return mason_cmd
+      end
+
+      return nil
+    end
+
+    -- Helper: only enable an LSP server if its binary is available.
+    local function enable_if_executable(server_name, cmd)
+      if resolve_executable(cmd or server_name) then
         vim.lsp.enable(server_name)
       end
     end
+
+    -- Explicitly keep formatter CLIs from attaching as LSP servers.
+    pcall(vim.lsp.disable, "stylua")
 
     -- DIAGNOSTICS CONFIGURATION
     local signs = { Error = "", Warn = "", Hint = "󰠠", Info = "" }
@@ -36,8 +57,10 @@ return {
     })
 
     -- PYTHON SERVER
+    local pyright_cmd = resolve_executable("pyright-langserver")
     vim.lsp.config("pyright", {
       capabilities = default,
+      cmd = pyright_cmd and { pyright_cmd, "--stdio" } or nil,
        settings = {
         python = {
           analysis = {
@@ -49,8 +72,10 @@ return {
     enable_if_executable("pyright", "pyright-langserver")
 
     -- LATEX SERVER
+    local texlab_cmd = resolve_executable("texlab")
     vim.lsp.config("texlab", {
       capabilities = default,
+      cmd = texlab_cmd and { texlab_cmd } or nil,
       settings = {
         texlab = {
           build = {
@@ -68,15 +93,19 @@ return {
 
     -- TYPST SERVER
     -- Ensure you have run :Lazy update for this to work
+    local tinymist_cmd = resolve_executable("tinymist")
     vim.lsp.config("tinymist", {
         capabilities = default,
+        cmd = tinymist_cmd and { tinymist_cmd } or nil,
         single_file_support = true,
     })
     enable_if_executable("tinymist")
 
     -- LUA SERVER
+    local lua_ls_cmd = resolve_executable("lua-language-server")
     vim.lsp.config("lua_ls", {
       capabilities = default,
+      cmd = lua_ls_cmd and { lua_ls_cmd } or nil,
       settings = {
         Lua = {
           diagnostics = {

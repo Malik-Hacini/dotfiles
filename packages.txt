@@ -38,6 +38,7 @@ ripgrep
 fd-find
 bat
 feh
+jq
 
 # Document / Academic
 zathura

@@ -7,7 +7,7 @@
 # This script:
 #   1. Installs required system packages (apt)
 #   2. Adds PPAs for Neovim, Fish, Alacritty
-#   3. Installs tools not in apt (starship, zoxide, yazi, lazygit, fzf, neovim)
+#   3. Installs tools not in apt (starship, zoxide, yazi, lazygit, fzf, opencode, neovim)
 #   4. Installs Node.js via NodeSource (needed by Neovim plugins)
 #   5. Installs Python tools for Neovim (ipython, jupytext, black, isort, pylint)
 #   6. Builds suckless tabbed (for zathura-tabbed)
@@ -164,6 +164,16 @@ install_lazygit() {
     sudo mv "$TMP_DIR/lazygit" /usr/local/bin/lazygit
     rm -rf "$TMP_DIR"
     log "Lazygit installed."
+}
+
+install_opencode() {
+    if command -v opencode &>/dev/null; then
+        warn "OpenCode already installed, skipping."
+        return
+    fi
+    info "Installing OpenCode..."
+    curl -fsSL https://opencode.ai/install | bash 2>&1 | tee -a "$LOG_FILE"
+    log "OpenCode installed."
 }
 
 # ─── Step 4: Python tools for Neovim ────────────────────────
@@ -323,6 +333,7 @@ stow_packages() {
         latex
         scripts
         wallpapers
+        opencode
     )
 
     # Ensure target directories exist (stow needs the parent directories)
@@ -400,14 +411,14 @@ main() {
                 echo "Options:"
                 echo "  --skip-packages   Skip apt package installation (and PPAs)"
                 echo "  --skip-fonts      Skip Nerd Font installation"
-                echo "  --skip-tools      Skip tool installation (starship, zoxide, yazi, lazygit, fzf, python tools)"
+                echo "  --skip-tools      Skip tool installation (starship, zoxide, yazi, lazygit, fzf, opencode, python tools)"
                 echo "  --stow-only       Only run stow (skip all installations)"
                 echo "  --help            Show this help message"
                 echo ""
                 echo "What gets installed:"
                 echo "  PPAs:      Neovim (unstable), Fish (release-4), Alacritty, NodeSource LTS"
                 echo "  APT:       i3, polybar, picom, rofi, dunst, flameshot, zathura, texlive-full, etc."
-                echo "  Binaries:  starship, zoxide, yazi, lazygit, fzf"
+                echo "  Binaries:  starship, zoxide, yazi, lazygit, fzf, opencode"
                 echo "  Python:    ipython, jupytext, black, isort, pylint"
                 echo "  Build:     suckless tabbed (for zathura-tabbed)"
                 echo "  Fonts:     JetBrainsMono, RobotoMono, NerdFontsSymbolsOnly, Font Awesome"
@@ -440,6 +451,7 @@ main() {
         install_zoxide
         install_yazi
         install_lazygit
+        install_opencode
         install_python_tools
         build_tabbed
     else

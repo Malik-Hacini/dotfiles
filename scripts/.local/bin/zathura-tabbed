@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Debug log
-LOG="/home/tag/zathura-debug.log"
+LOG="$HOME/zathura-debug.log"
 echo "--- Run: $(date) ---" >> "$LOG"
 
 # Force X11 for Zathura
 export GDK_BACKEND=x11
 
 TABBED_NAME="zathura-tabbed"
-TABBED_BIN="/home/tag/.local/bin/tabbed"
+TABBED_BIN="$HOME/.local/bin/tabbed"
 
 # 1. Get Current i3 Workspace Name
 # We use jq to parse the focused workspace name safely
@@ -22,7 +22,7 @@ fi
 echo "Current Workspace: $WS_NAME" >> "$LOG"
 
 # 2. Define Workspace-Specific Lockfile
-XID_FILE="/home/tag/.zathura-tabbed-xid-${WS_NAME//\//_}" # Replace slashes in name just in case
+XID_FILE="$HOME/.zathura-tabbed-xid-${WS_NAME//\//_}" # Replace slashes in name just in case
 
 XID=""
 

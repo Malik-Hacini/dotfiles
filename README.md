@@ -1,148 +1,130 @@
 # Dotfiles
 
-Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/), themed with **Catppuccin Mocha**.
+Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/) for an Ubuntu + i3 (X11) workflow.
+Theme: **Catppuccin Mocha**.
 
-i3 + polybar + picom + rofi + dunst | Alacritty + Fish + Starship | Neovim (NeoTex)
+Main stack:
 
-## Quick Start
+- i3 + polybar + picom + rofi + dunst
+- Alacritty + Fish + Starship
+- Neovim (NeoTex) + Yazi + Zathura + Qutebrowser
+
+## Fresh Install (Recommended)
+
+### 1) Pre-reqs
+
+The bootstrap script is Ubuntu-focused and uses `apt` + PPAs.
+On non-Ubuntu Debian derivatives, run with `--skip-packages` and install equivalents manually.
+
+```bash
+sudo apt update
+sudo apt install -y git curl software-properties-common
+```
+
+### 2) Clone and run installer
 
 ```bash
 git clone <your-repo-url> ~/dotfiles
 cd ~/dotfiles
-sudo apt install stow
 ./install.sh
 ```
 
-After installation, log out and back in for the fish shell change to take effect, then open Neovim and run `:Lazy sync`.
+### 3) First boot steps
 
-## What Gets Installed
+1. Log out and back in (fish is set as default shell).
+2. Open Neovim and run:
+   - `:Lazy sync`
+   - `:Mason`
+   - `:checkhealth`
 
-### Via PPAs (latest versions)
-| Package | PPA | Why |
-|---------|-----|-----|
-| Neovim | `ppa:neovim-ppa/unstable` | Ubuntu apt ships 0.7.x, config needs 0.10+ |
-| Fish | `ppa:fish-shell/release-4` | Ubuntu apt ships old 3.x |
-| Alacritty | `ppa:aslatter/ppa` | Not in Ubuntu repos |
-| Node.js | NodeSource LTS | Needed by nvim plugins (markdown-preview, Mason LSPs) |
+Installer log is written to `~/dotfiles/install.log`.
 
-### Via apt (from packages.txt)
-i3-wm, polybar, picom, rofi, dunst, flameshot, zathura, sxiv, texlive-full, htop, neofetch, python3, qutebrowser, vlc, and build dependencies.
+## Installer Flags
 
-### Via binary/script installers
-| Tool | Method |
-|------|--------|
-| fzf | `git clone` to `~/.fzf` (apt version is 0.29, current is 0.67+) |
-| Starship | Official install script |
-| Zoxide | Official install script |
-| Yazi | GitHub release binary |
-| Lazygit | GitHub release binary |
+```bash
+./install.sh --skip-tools     # Skip fzf/starship/zoxide/yazi/lazygit/opencode/python/tabbed
+```
 
-### Built from source
-| Tool | Purpose |
-|------|---------|
-| suckless tabbed | Tab container for zathura and sxiv (zathura-tabbed, sxiv-tabbed scripts) |
+## What `install.sh` Installs
 
-### Python tools (pip --user)
-ipython, jupytext, black, isort, pylint — all used by Neovim plugins.
+### Repositories added
 
-### Fonts
-JetBrainsMono Nerd Font, RobotoMono Nerd Font, NerdFontsSymbolsOnly, Font Awesome.
+- `ppa:neovim-ppa/unstable`
+- `ppa:fish-shell/release-4`
+- `ppa:aslatter/ppa`
+- NodeSource LTS repo (if `node` is missing)
 
-## Stow Packages
+### APT packages
 
-| Package | What it manages |
-|---------|----------------|
-| `bash` | `.bashrc`, `.profile`, `.fzf.bash` |
-| `fish` | `~/.config/fish/` (config.fish, functions) |
+Everything in `packages.txt`, including:
+
+- Core: `git`, `stow`, `curl`, `wget`, `unzip`, `build-essential`, `cmake`, `pkg-config`
+- Desktop: `i3-wm`, `i3lock`, `i3status`, `polybar`, `picom`, `rofi`, `dunst`, `flameshot`, `xdotool`, `x11-xserver-utils`, `dex`, `xss-lock`, `network-manager-gnome`, `pulseaudio-utils`
+- CLI: `htop`, `neofetch`, `ripgrep`, `fd-find`, `bat`, `feh`, `jq`
+- Docs/academic: `zathura`, `zathura-pdf-poppler`, `texlive-full`, `latexmk`
+- Media/viewer: `sxiv`, `vlc`, `xwininfo`
+- Python base: `python3`, `python3-pip`, `python3-venv`
+- Build deps for `tabbed`: `libx11-dev`, `libxft-dev`
+
+Also installed explicitly by script:
+
+- `neovim`, `fish`, `alacritty`, `nodejs`, `qutebrowser`
+
+### Non-APT installs
+
+- `fzf` (git clone to `~/.fzf`)
+- `starship` (official installer)
+- `zoxide` (official installer)
+- `yazi` + `ya` (GitHub release binary)
+- `lazygit` (GitHub release binary)
+- `opencode` (official installer from opencode.ai)
+- Yazi plugin sync via `ya pack -i`
+- Python user tools: `ipython`, `jupytext`, `black`, `isort`, `pylint`
+- `tabbed` built from source to `~/.local/bin/tabbed`
+- Fonts: `JetBrainsMono`, `RobotoMono`, `NerdFontsSymbolsOnly`, `Font Awesome`
+
+## Stow Packages Applied by Installer
+
+`install.sh` stows these packages automatically:
+
+| Package | Target |
+|---|---|
+| `bash` | `~/.bashrc`, `~/.profile`, `~/.fzf.bash` |
+| `fish` | `~/.config/fish/` |
 | `starship` | `~/.config/starship.toml` |
-| `git` | `.gitconfig` |
+| `git` | `~/.gitconfig` |
 | `i3` | `~/.config/i3/config` |
-| `polybar` | `~/.config/polybar/` (config, launch script, modules) |
+| `polybar` | `~/.config/polybar/` |
 | `picom` | `~/.config/picom/picom.conf` |
-| `rofi` | `~/.config/rofi/` (config.rasi, catppuccin theme, power menu) |
+| `rofi` | `~/.config/rofi/` |
 | `dunst` | `~/.config/dunst/dunstrc` |
 | `alacritty` | `~/.config/alacritty/alacritty.toml` |
-| `nvim` | `~/.config/nvim/` (NeoTex config — LaTeX/Typst/Python) |
-| `yazi` | `~/.config/yazi/` (config, plugins, catppuccin flavor) |
-| `zathura` | `~/.config/zathura/` (zathurarc, catppuccin theme) |
+| `nvim` | `~/.config/nvim/` |
+| `yazi` | `~/.config/yazi/` |
+| `zathura` | `~/.config/zathura/` |
 | `lazygit` | `~/.config/lazygit/config.yml` |
-| `qutebrowser` | `~/.config/qutebrowser/` |
-| `xdg-desktop-portal` | `~/.config/xdg-desktop-portal/portals.conf` (routes FileChooser to termfilechooser) |
-| `xdg-desktop-portal-termfilechooser` | `~/.config/xdg-desktop-portal-termfilechooser/` (yazi-wrapper.sh, config) |
-| `fontconfig` | `~/.config/fontconfig/` |
+| `fontconfig` | `~/.config/fontconfig/fonts.conf` |
 | `neofetch` | `~/.config/neofetch/config.conf` |
 | `htop` | `~/.config/htop/htoprc` |
-| `latex` | `~/texmf/` (custom .bst files) |
+| `qutebrowser` | `~/.config/qutebrowser/` |
+| `xdg-desktop-portal` | `~/.config/xdg-desktop-portal/portals.conf` |
+| `xdg-desktop-portal-termfilechooser` | `~/.config/xdg-desktop-portal-termfilechooser/` |
+| `latex` | `~/texmf/` (custom `.bst` files) |
 | `scripts` | `~/.local/bin/rofi-power`, `~/.local/bin/zathura-tabbed`, `~/.local/bin/sxiv-tabbed` |
+| `wallpapers` | `~/Pictures/Wallpapers/` |
+| `opencode` | `~/.config/opencode/opencode.json` |
 
-## Install Script Options
+## Manual Setup (Important)
 
-```
-./install.sh                  # Full install
-./install.sh --stow-only      # Only create symlinks (no package installs)
-./install.sh --skip-packages  # Skip apt/PPA installs
-./install.sh --skip-tools     # Skip binary tool installs (fzf, starship, etc.)
-./install.sh --skip-fonts     # Skip font installs
-```
+These items are intentionally not fully automated.
 
-## Manual Setup Required
+### 1) xdg-desktop-portal-termfilechooser backend (for Yazi file picker)
 
-These items cannot be automated by the install script and must be set up manually:
-
-### Zen Browser
-
-The fish and bash configs alias `zen` to `~/.local/opt/zen/zen`. The alias is conditional — it only activates if the binary exists. To install:
-
-1. Download the AppImage from [zen-browser.app](https://zen-browser.app/)
-2. Extract to `~/.local/opt/zen/`
-3. Ensure `~/.local/opt/zen/zen` is executable
-
-### CUDA Toolkit
-
-Both fish and bash configs conditionally add CUDA to `PATH` and `LD_LIBRARY_PATH` if `/usr/local/cuda-12.8` (or `/usr/local/cuda`) exists. If you need CUDA:
-
-1. Follow [NVIDIA's installation guide](https://developer.nvidia.com/cuda-downloads) for your GPU
-2. The configs auto-detect the installation path
-
-### Monitor Configuration
-
-The i3 config includes `~/.config/i3/local.conf` for machine-specific commands (xrandr, xmodmap, etc.). This file is **not tracked by git** — create it on each machine:
+The config is stowed, but the backend binary must be installed manually.
 
 ```bash
-cat > ~/.config/i3/local.conf << 'EOF'
-# Machine-specific i3 config
-exec --no-startup-id xrandr --output eDP-1 --off --output HDMI-1 --auto
-EOF
-```
+sudo apt install -y meson ninja-build xdg-desktop-portal xdg-desktop-portal-gtk
 
-Run `xrandr --listmonitors` to find your output names. i3 silently ignores the `include` if the file doesn't exist, so this is safe to skip on machines where the default display is fine.
-
-### OpenCode
-
-The fish config conditionally adds `~/.opencode/bin` to PATH if it exists. Install from [opencode.ai](https://opencode.ai) if desired.
-
-For Firecrawl MCP, the API key is loaded from `~/.config/opencode/firecrawl_api_key` using OpenCode's `{file:...}` variable substitution. This file is ignored by git, so keep the secret there instead of in `opencode.json`.
-
-```bash
-mkdir -p ~/.config/opencode
-printf '%s' 'fc-your-key-here' > ~/.config/opencode/firecrawl_api_key
-chmod 600 ~/.config/opencode/firecrawl_api_key
-```
-
-### Zotero Bibliography
-
-The Neovim config (telescope-bibtex) expects `~/texmf/bibtex/bib/Zotero.bib`. If you use Zotero for reference management, configure Better BibTeX to auto-export to this path.
-
-### Suckless tabbed (Catppuccin theme)
-
-The install script builds a vanilla `tabbed` from suckless.org. If you want the Catppuccin-themed version, you can place a patched `tabbed` source tree at `~/dotfiles/tabbed-src/` before running install — the script will detect and use it instead of cloning vanilla upstream. Otherwise you can rebuild with your preferred patches after install.
-
-### xdg-desktop-portal-termfilechooser (yazi as file picker)
-
-GTK file dialogs (e.g. in Zen Browser) are replaced with yazi running in alacritty via `xdg-desktop-portal-termfilechooser`. The config and wrapper script are managed by stow, but the **portal backend binary itself must be built from source**:
-
-```bash
-# Build and install the portal backend
 git clone https://github.com/boydaihungst/xdg-desktop-portal-termfilechooser.git /tmp/xdptf
 cd /tmp/xdptf
 meson setup build
@@ -150,42 +132,109 @@ ninja -C build
 sudo ninja -C build install
 ```
 
-After installing, the portal activates via D-Bus on demand. The i3 config already imports the environment into systemd and restarts the service on login. See `~/.config/xdg-desktop-portal-termfilechooser/agents.md` for architecture details and debugging commands.
+Then relogin, or run:
 
-## Neovim Plugin Dependencies
+```bash
+systemctl --user import-environment
+systemctl --user restart xdg-desktop-portal-termfilechooser.service
+```
 
-The NeoTex config uses lazy.nvim and expects these external tools (most are installed by the script):
+Architecture/debug notes are in `xdg-desktop-portal-termfilechooser/.config/xdg-desktop-portal-termfilechooser/agents.md`.
 
-| Tool | Purpose | Installed by |
-|------|---------|-------------|
-| node/npm | markdown-preview, Mason LSPs | install.sh (NodeSource) |
-| python3/pip | pyright, jupytext, ipython, formatters | install.sh (apt + pip) |
-| git | Plugin manager, gitsigns, lazygit | install.sh (apt) |
-| make + cc | telescope-fzf-native | install.sh (build-essential) |
-| lazygit | Git TUI within nvim | install.sh (binary) |
-| yazi | File manager within nvim | install.sh (binary) |
-| fish | toggleterm default shell | install.sh (PPA) |
-| zathura | vimtex PDF viewer | install.sh (apt) |
-| latexmk | vimtex build system | install.sh (apt) |
-| qutebrowser | typst-preview browser | install.sh (apt) |
-| stylua | Lua formatter | Mason auto-install |
-| prettier | Web formatter | Mason auto-install |
+### 2) Machine-specific monitor config
 
-Mason will auto-install LSP servers (pyright, texlab, tinymist, lua_ls) and linting/formatting tools on first use.
+Create `~/.config/i3/local.conf` for machine-local `xrandr` and similar overrides.
 
-## Uninstalling a Package
+```bash
+cat > ~/.config/i3/local.conf << 'EOF'
+# Example
+exec --no-startup-id xrandr --output eDP-1 --off --output HDMI-1 --auto
+EOF
+```
+
+### 3) Polybar hardware names
+
+`polybar/.config/polybar/config.ini` currently uses:
+
+- Wireless interface: `wlo1`
+- Battery: `BAT0`
+- AC adapter: `ADP1`
+
+If your machine uses different names, update them.
+
+### 4) Tabbed wrappers extra deps
+
+`zathura-tabbed` and `sxiv-tabbed` rely on additional tools not in `packages.txt`:
+
+```bash
+sudo apt install -y x11-utils
+```
+
+Note: `jq` and `xdotool` are already in `packages.txt` and installed automatically.
+
+### 5) Custom `tabbed` source (optional)
+
+If you want a patched/themed `tabbed` build, place your source tree at:
+
+- `~/dotfiles/tabbed-src/`
+
+`install.sh` will build that local source instead of cloning vanilla upstream.
+
+### 6) Zen Browser (optional)
+
+`fish` and `bash` expose `zen` alias only if this binary exists:
+
+- `~/.local/opt/zen/zen`
+
+### 7) CUDA (optional)
+
+Shell configs auto-detect `/usr/local/cuda-12.8` or `/usr/local/cuda` and update `PATH` / `LD_LIBRARY_PATH` when present.
+
+### 8) Firecrawl API key for OpenCode MCP (optional)
+
+OpenCode is installed automatically by `install.sh` and its config is stowed from `opencode/`. If you use the Firecrawl MCP server, configure the API key:
+
+```bash
+mkdir -p ~/.config/opencode
+printf '%s' 'fc-your-key-here' > ~/.config/opencode/firecrawl_api_key
+chmod 600 ~/.config/opencode/firecrawl_api_key
+```
+
+This secret file is ignored by git and referenced by `opencode.json`.
+
+### 9) Zotero bibliography (optional)
+
+Neovim bibliography tooling expects:
+
+- `~/texmf/bibtex/bib/Zotero.bib`
+
+## Neovim External Tooling Notes
+
+On first run, Mason auto-installs configured LSP/formatter/linter tools (pyright, texlab, tinymist, lua-language-server, stylua, prettier, shellcheck, markdownlint, etc.).
+
+System tools expected by the config include:
+
+- `node/npm` (Markdown preview, JS-based tooling)
+- `python3/pip` (`ipython`, notebook flow)
+- `git`, `make`, C toolchain
+- `lazygit`, `yazi`, `zathura`, `latexmk`, `qutebrowser`
+- `pandoc` (optional, for Neovim document export keymaps)
+
+## Day-2 Operations
 
 ```bash
 cd ~/dotfiles
-stow -D <package>   # Remove symlinks for a package
+stow -D <package>   # remove symlinks for one package
+stow -R <package>   # restow one package
 ```
 
-## Adding a New Package
+To add a new stow package:
 
 ```bash
 mkdir -p ~/dotfiles/newpkg/.config/newpkg
 cp ~/.config/newpkg/config.toml ~/dotfiles/newpkg/.config/newpkg/
-cd ~/dotfiles && stow newpkg
+cd ~/dotfiles
+stow newpkg
 ```
 
-The directory structure inside each package must mirror the path relative to `$HOME`.
+The folder structure inside each package must match the path relative to `$HOME`.

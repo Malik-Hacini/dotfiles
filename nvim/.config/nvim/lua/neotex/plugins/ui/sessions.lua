@@ -11,7 +11,7 @@ return {
     local config = require('session_manager.config')
     require('session_manager').setup({
       -- The directory where the session files will be saved
-      sessions_dir = Path:new(vim.fn.stdpath('config'), 'sessions'),
+      sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
       -- Function that replaces symbols into separators and colons to transform filename into a session directory
       -- session_filename_to_dir =  '~/.config/nvim/sessions/',
       -- Function that replaces separators and colons into special symbols to transform session directory into a filename
@@ -62,5 +62,4 @@ return {
     })
   end,
 }
-
 

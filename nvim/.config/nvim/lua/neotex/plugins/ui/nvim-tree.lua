@@ -563,6 +563,15 @@ return {
           vim.wo.sidescrolloff = 0
           vim.wo.list = false
 
+          -- Keep separator blended with tree background
+          vim.wo.winhighlight = table.concat({
+            "Normal:NvimTreeNormal",
+            "NormalNC:NvimTreeNormalNC",
+            "EndOfBuffer:NvimTreeEndOfBuffer",
+            "CursorLine:NvimTreeCursorLine",
+            "WinSeparator:NvimTreeWinSeparator",
+          }, ",")
+
           -- Apply visual settings consistently
           vim.wo.cursorline = true      -- Highlight current line
           vim.wo.signcolumn = "yes"     -- Show sign column
@@ -822,7 +831,6 @@ return {
 
             -- Make explorer background darker than file buffers using Catppuccin Mocha shades.
             local tree_bg = normal_hex_bg
-            local tree_sep = normal_hex_bg
             local cursorline_bg = normal_hex_bg
 
             local ok_palette, palette = pcall(function()
@@ -831,17 +839,16 @@ return {
 
             if ok_palette and palette then
               tree_bg = palette.mantle or normal_hex_bg
-              tree_sep = palette.surface1 or tree_bg
               cursorline_bg = palette.surface0 or tree_bg
             end
 
             vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = tree_bg })
             vim.api.nvim_set_hl(0, "NvimTreeNormalNC", { bg = tree_bg })
             vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = tree_bg })
-            vim.api.nvim_set_hl(0, "NvimTreeWinSeparator", { fg = tree_sep, bg = tree_bg })
+            vim.api.nvim_set_hl(0, "NvimTreeWinSeparator", { fg = tree_bg, bg = tree_bg })
             vim.api.nvim_set_hl(0, "NvimTreeCursorLine", { bg = cursorline_bg })
-            -- Match the bufferline offset area to nvim-tree background
-            vim.api.nvim_set_hl(0, "BufferLineFill", { bg = tree_bg })
+            -- Keep the NvimTree offset block aligned with tree background.
+            vim.api.nvim_set_hl(0, "NeoTreeOffset", { bg = tree_bg })
           end
 
           -- We no longer need to log styling information

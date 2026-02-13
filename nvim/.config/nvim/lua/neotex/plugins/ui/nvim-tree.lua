@@ -379,7 +379,7 @@ return {
 
       -- custom mappings
       local keymap = vim.keymap -- for conciseness
-      keymap.set('n', '<CR>', api.node.open.tab, opts('Open'))
+      keymap.set('n', '<CR>', api.node.open.edit, opts('Open'))
       keymap.set('n', '<S-M>', api.node.show_info_popup, opts('Info'))
       keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close Directory'))
       keymap.set('n', 'l', api.node.open.edit, opts('Open'))
@@ -399,7 +399,8 @@ return {
       keymap.set('n', 'R', api.tree.reload, opts('Refresh'))
       keymap.set('n', 'o', api.node.run.system, opts('System Open'))
       keymap.set('n', 's', api.tree.search_node, opts('Search'))
-      keymap.set('n', 'v', api.node.open.vertical, opts('Vertical Split'))
+      keymap.set('n', 't', api.node.open.tab, opts('Open in New Tab'))
+      keymap.set('n', 'h', api.node.open.vertical, opts('Vertical Split'))
       keymap.set('n', 'x', api.fs.cut, opts('Cut'))
       keymap.set('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
       -- keymap.set('n', '<BS>',  api.node.navigate.parent_close,        opts('Close Directory'))
@@ -917,7 +918,7 @@ return {
       end,
       actions = {
         open_file = {
-          quit_on_open = true,
+          quit_on_open = false,
           eject = true,
           resize_window = true,
           window_picker = {

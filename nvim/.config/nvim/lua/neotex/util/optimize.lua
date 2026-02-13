@@ -46,6 +46,43 @@ local function create_floating_window(title)
   return buf, win, width
 end
 
+-- Parse Neovim --startuptime lines into sortable timing events.
+local function parse_startup_lines(lines)
+  local startup_time = 0
+  local startup_events = {}
+
+  for _, line in ipairs(lines) do
+    local timing_part, event = line:match("^%s*([%d%.%s]+):%s(.+)$")
+    if timing_part and event then
+      local numbers = {}
+      for value in timing_part:gmatch("(%d+%.%d+)") do
+        table.insert(numbers, tonumber(value))
+      end
+
+      if #numbers > 0 then
+        local clock_time = numbers[1]
+        local elapsed_time = numbers[2] or clock_time
+        local self_time = numbers[3]
+
+        table.insert(startup_events, {
+          time = elapsed_time,
+          self_time = self_time,
+          clock_time = clock_time,
+          event = event
+        })
+
+        startup_time = math.max(startup_time, clock_time)
+      end
+    end
+  end
+
+  table.sort(startup_events, function(a, b)
+    return a.time > b.time
+  end)
+
+  return startup_time, startup_events
+end
+
 -- Analyzes Neovim startup time by running neovim with --startuptime
 function M.analyze_startup()
   local output_file = vim.fn.tempname()
@@ -66,22 +103,7 @@ function M.analyze_startup()
       
       -- Read and parse the startuptime file
       local lines = vim.fn.readfile(output_file)
-      local startup_time = 0
-      local startup_events = {}
-      
-      for _, line in ipairs(lines) do
-        local time, event = line:match("^(%d+%.%d+).*: (.+)$")
-        if time and event then
-          time = tonumber(time)
-          table.insert(startup_events, {time = time, event = event})
-          startup_time = time -- Last time will be the total startup time
-        end
-      end
-      
-      -- Sort events by time taken (descending)
-      table.sort(startup_events, function(a, b)
-        return a.time > b.time
-      end)
+      local startup_time, startup_events = parse_startup_lines(lines)
       
       -- Store results for later analysis
       M.profile_data.startup = {
@@ -306,22 +328,7 @@ function M.generate_report()
       
       -- Read and parse the startuptime file
       local lines = vim.fn.readfile(output_file)
-      local startup_time = 0
-      local startup_events = {}
-      
-      for _, line in ipairs(lines) do
-        local time, event = line:match("^(%d+%.%d+).*: (.+)$")
-        if time and event then
-          time = tonumber(time)
-          table.insert(startup_events, {time = time, event = event})
-          startup_time = time -- Last time will be the total startup time
-        end
-      end
-      
-      -- Sort events by time taken (descending)
-      table.sort(startup_events, function(a, b)
-        return a.time > b.time
-      end)
+      local startup_time, startup_events = parse_startup_lines(lines)
       
       -- Store results
       M.profile_data.startup = {

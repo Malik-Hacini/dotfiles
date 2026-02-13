@@ -21,6 +21,27 @@ vim.notify_level = vim.log.levels.INFO
 -- This is critical and must happen first
 vim.g.mapleader = " " -- Space as leader key
 
+-- Disable selected built-in runtime plugins early so startup can skip sourcing them.
+-- This must happen before any plugin/bootstrap logic.
+local disabled_builtin_plugins = {
+  loaded_matchit = 1,
+  loaded_matchparen = 1,
+  loaded_tutor_mode_plugin = 1,
+  loaded_2html_plugin = 1,
+  loaded_zipPlugin = 1,
+  loaded_tarPlugin = 1,
+  loaded_gzip = 1,
+  loaded_netrw = 1,
+  loaded_netrwPlugin = 1,
+  loaded_netrwSettings = 1,
+  loaded_netrwFileHandlers = 1,
+  loaded_spellfile_plugin = 1,
+}
+
+for plugin_name, disabled in pairs(disabled_builtin_plugins) do
+  vim.g[plugin_name] = disabled
+end
+
 -- Ensure legacy netrw augroup exists to avoid noisy startup errors
 -- from plugins that clear `FileExplorer` autocmds conditionally.
 pcall(vim.api.nvim_create_augroup, "FileExplorer", { clear = true })

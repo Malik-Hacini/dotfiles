@@ -3,13 +3,16 @@ set -eu
 
 config_home=${XDG_CONFIG_HOME:-$HOME/.config}
 cache_home=${XDG_CACHE_HOME:-$HOME/.cache}
+state_home=${XDG_STATE_HOME:-$HOME/.local/state}
 wal_cache_dir="$cache_home/wal"
-wallpaper_state="$config_home/wal/current-wallpaper"
+wallpaper_state="$state_home/theme-switch/current-wallpaper"
+template_source_dir="$config_home/theme-switch/templates"
+wal_template_dir="$config_home/wal/templates"
 default_wallpaper="$HOME/Pictures/Wallpapers/catppuccin_gyro.jpg"
 fehbg="$HOME/.fehbg"
 
 usage() {
-    printf 'Usage: %s [--restore] [--theme NAME | --wallpaper PATH] [--set-wallpaper PATH]\n' "${0##*/}" >&2
+    printf 'Usage: %s [--restore] [--no-reload] [--theme NAME | --wallpaper PATH] [--set-wallpaper PATH]\n' "${0##*/}" >&2
 }
 
 warn() {
@@ -30,6 +33,17 @@ normalize_theme() {
 write_wallpaper_state() {
     mkdir -p "$(dirname "$wallpaper_state")"
     printf '%s\n' "$1" > "$wallpaper_state"
+}
+
+sync_templates() {
+    [ -d "$template_source_dir" ] || return 0
+
+    mkdir -p "$wal_template_dir"
+
+    for template in "$template_source_dir"/*; do
+        [ -f "$template" ] || continue
+        install -m 0644 "$template" "$wal_template_dir/$(basename "$template")"
+    done
 }
 
 current_wallpaper() {
@@ -82,9 +96,11 @@ post_apply() {
             apply_fehbg
         fi
     fi
+}
 
-    if command -v dunstctl >/dev/null 2>&1; then
-        dunstctl reload >/dev/null 2>&1 || true
+reload_i3() {
+    if [ -n "${I3SOCK:-}" ] && command -v i3-msg >/dev/null 2>&1; then
+        i3-msg reload >/dev/null 2>&1 || true
     fi
 }
 
@@ -94,6 +110,7 @@ run_wal() {
         return 1
     fi
 
+    sync_templates
     wal "$@"
     post_apply
 }
@@ -101,6 +118,7 @@ run_wal() {
 restore_theme() {
     if command -v wal >/dev/null 2>&1; then
         if [ -f "$wal_cache_dir/colors.json" ] || [ -f "$wal_cache_dir/sequences" ] || [ -f "$wal_cache_dir/colors.Xresources" ]; then
+            sync_templates
             wal -R -n -e >/dev/null 2>&1 || true
             post_apply
             return 0
@@ -108,7 +126,8 @@ restore_theme() {
 
         if [ -f "$default_wallpaper" ]; then
             write_wallpaper_state "$default_wallpaper"
-            wal -i "$default_wallpaper" --cols16 -n -e >/dev/null 2>&1 || true
+            sync_templates
+            wal --theme catppuccin-mocha --cols16 -n -e >/dev/null 2>&1 || true
             post_apply
             return 0
         fi
@@ -123,6 +142,7 @@ restore_theme() {
 }
 
 restore=false
+reload_after_apply=true
 theme_name=
 theme_wallpaper=
 image_wallpaper=
@@ -131,6 +151,9 @@ while [ "$#" -gt 0 ]; do
     case "$1" in
         --restore)
             restore=true
+            ;;
+        --no-reload)
+            reload_after_apply=false
             ;;
         --theme)
             [ "$#" -ge 2 ] || {
@@ -169,7 +192,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ "$restore" = true ]; then
-    if [ -n "$theme_name" ] || [ -n "$image_wallpaper" ] || [ -n "$theme_wallpaper" ]; then
+    if [ -n "$theme_name" ] || [ -n "$image_wallpaper" ] || [ -n "$theme_wallpaper" ] || [ "$reload_after_apply" = false ]; then
         usage
         exit 1
     fi
@@ -190,7 +213,8 @@ if [ -n "$image_wallpaper" ]; then
     fi
 
     write_wallpaper_state "$image_wallpaper"
-    run_wal -i "$image_wallpaper" --cols16 -n
+    run_wal -i "$image_wallpaper" --cols16 -n -e
+    [ "$reload_after_apply" = true ] && reload_i3
     exit 0
 fi
 
@@ -205,7 +229,8 @@ if [ -n "$theme_name" ]; then
     fi
 
     theme_name=$(normalize_theme "$theme_name")
-    run_wal --theme "$theme_name" --cols16 -n
+    run_wal --theme "$theme_name" --cols16 -n -e
+    [ "$reload_after_apply" = true ] && reload_i3
     exit 0
 fi
 

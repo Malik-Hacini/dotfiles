@@ -196,7 +196,7 @@ set_wallpaper() {
     fi
 
     if [ -x "$theme_switch" ] && command -v wal &>/dev/null; then
-        if "$theme_switch" --theme catppuccin-mocha --set-wallpaper "$wallpaper"; then
+        if "$theme_switch" --no-reload --theme catppuccin-mocha --set-wallpaper "$wallpaper"; then
             log "Initial pywal16 theme applied."
             return 0
         fi

@@ -119,6 +119,12 @@ end
 # Use portal for file picker
 set -gx GTK_USE_PORTAL 1
 
+set -l lazygit_config_home $HOME/.config
+if set -q XDG_CONFIG_HOME
+    set lazygit_config_home $XDG_CONFIG_HOME
+end
+set -gx LG_CONFIG_FILE "$lazygit_config_home/lazygit/config.yml,$lazygit_config_home/lazygit/theme.yml"
+
 # Sync GUI/session environment from systemd user manager.
 # This keeps long-lived shells (tmux/resurrect) aligned with the active X11 session.
 if status is-interactive

@@ -1,1 +1,2 @@
 export GTK_USE_PORTAL=1
+export LG_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/lazygit/config.yml,${XDG_CONFIG_HOME:-$HOME/.config}/lazygit/theme.yml"

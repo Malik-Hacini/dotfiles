@@ -46,6 +46,28 @@ sync_templates() {
     done
 }
 
+link_generated_file() {
+    source_file=$1
+    target_file=$2
+
+    [ -e "$source_file" ] || return 0
+
+    mkdir -p "$(dirname "$target_file")"
+    rm -f "$target_file"
+    ln -s "$source_file" "$target_file"
+}
+
+sync_generated_targets() {
+    local_yazi_flavor_dir="$config_home/yazi/flavors/pywal.yazi"
+
+    link_generated_file "$wal_cache_dir/lazygit-theme.yml" "$config_home/lazygit/theme.yml"
+    link_generated_file "$wal_cache_dir/pywal.theme" "$config_home/btop/themes/pywal.theme"
+
+    mkdir -p "$local_yazi_flavor_dir"
+    link_generated_file "$wal_cache_dir/yazi-flavor.toml" "$local_yazi_flavor_dir/flavor.toml"
+    link_generated_file "$config_home/yazi/flavors/catppuccin-mocha.yazi/tmtheme.xml" "$local_yazi_flavor_dir/tmtheme.xml"
+}
+
 current_wallpaper() {
     if [ -f "$wallpaper_state" ]; then
         cat "$wallpaper_state"
@@ -89,6 +111,7 @@ merge_xresources() {
 
 post_apply() {
     merge_xresources
+    sync_generated_targets
 
     if wallpaper=$(current_wallpaper 2>/dev/null); then
         if [ -f "$wallpaper" ]; then

@@ -96,3 +96,4 @@ set recolor-keephue             true     # Don't preserve original colors in ima
 # To disable recoloring completely, change to:
 # set recolor false
 
+include ../../.cache/wal/zathuracolsrc

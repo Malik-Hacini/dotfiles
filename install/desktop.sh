@@ -188,10 +188,20 @@ install_sddm_theme() {
 set_wallpaper() {
     local wallpaper="$HOME/Pictures/Wallpapers/catppuccin_gyro.jpg"
     local fehbg="$HOME/.fehbg"
+    local theme_switch="$HOME/.local/bin/theme-switch"
 
     if [ ! -f "$wallpaper" ]; then
         warn "Wallpaper not found at $wallpaper"
         return
+    fi
+
+    if [ -x "$theme_switch" ] && command -v wal &>/dev/null; then
+        if "$theme_switch" --theme catppuccin-mocha --set-wallpaper "$wallpaper"; then
+            log "Initial pywal16 theme applied."
+            return 0
+        fi
+
+        warn "Failed to seed pywal16 theme; falling back to direct wallpaper setup."
     fi
 
     if ! command -v feh &>/dev/null; then

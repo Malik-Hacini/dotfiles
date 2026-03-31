@@ -21,6 +21,7 @@ install_python_tools() {
     export PATH="$HOME/.local/bin:$PATH"
 
     local tools=(
+        pywal16
         ipython
         jupytext
         black

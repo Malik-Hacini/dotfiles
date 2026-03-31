@@ -1,0 +1,213 @@
+#!/usr/bin/env sh
+set -eu
+
+config_home=${XDG_CONFIG_HOME:-$HOME/.config}
+cache_home=${XDG_CACHE_HOME:-$HOME/.cache}
+wal_cache_dir="$cache_home/wal"
+wallpaper_state="$config_home/wal/current-wallpaper"
+default_wallpaper="$HOME/Pictures/Wallpapers/catppuccin_gyro.jpg"
+fehbg="$HOME/.fehbg"
+
+usage() {
+    printf 'Usage: %s [--restore] [--theme NAME | --wallpaper PATH] [--set-wallpaper PATH]\n' "${0##*/}" >&2
+}
+
+warn() {
+    printf '%s\n' "$*" >&2
+}
+
+normalize_theme() {
+    case "$1" in
+        latte|frappe|macchiato|mocha)
+            printf 'catppuccin-%s\n' "$1"
+            ;;
+        *)
+            printf '%s\n' "$1"
+            ;;
+    esac
+}
+
+write_wallpaper_state() {
+    mkdir -p "$(dirname "$wallpaper_state")"
+    printf '%s\n' "$1" > "$wallpaper_state"
+}
+
+current_wallpaper() {
+    if [ -f "$wallpaper_state" ]; then
+        cat "$wallpaper_state"
+        return 0
+    fi
+
+    if [ -f "$wal_cache_dir/wal" ]; then
+        cat "$wal_cache_dir/wal"
+        return 0
+    fi
+
+    if [ -f "$default_wallpaper" ]; then
+        printf '%s\n' "$default_wallpaper"
+        return 0
+    fi
+
+    return 1
+}
+
+write_fehbg() {
+    wallpaper=$1
+
+    [ -n "$wallpaper" ] || return 0
+
+    mkdir -p "$(dirname "$fehbg")"
+    printf '#!/usr/bin/env sh\nfeh --no-fehbg --bg-fill "%s"\n' "$wallpaper" > "$fehbg"
+    chmod +x "$fehbg"
+}
+
+apply_fehbg() {
+    if [ -n "${DISPLAY:-}" ] && [ -x "$fehbg" ] && command -v feh >/dev/null 2>&1; then
+        "$fehbg" >/dev/null 2>&1 || true
+    fi
+}
+
+merge_xresources() {
+    if command -v xrdb >/dev/null 2>&1 && [ -f "$wal_cache_dir/colors.Xresources" ]; then
+        xrdb -merge "$wal_cache_dir/colors.Xresources" >/dev/null 2>&1 || true
+    fi
+}
+
+post_apply() {
+    merge_xresources
+
+    if wallpaper=$(current_wallpaper 2>/dev/null); then
+        if [ -f "$wallpaper" ]; then
+            write_fehbg "$wallpaper"
+            apply_fehbg
+        fi
+    fi
+
+    if command -v dunstctl >/dev/null 2>&1; then
+        dunstctl reload >/dev/null 2>&1 || true
+    fi
+}
+
+run_wal() {
+    if ! command -v wal >/dev/null 2>&1; then
+        warn "wal (pywal16) is not installed."
+        return 1
+    fi
+
+    wal "$@"
+    post_apply
+}
+
+restore_theme() {
+    if command -v wal >/dev/null 2>&1; then
+        if [ -f "$wal_cache_dir/colors.json" ] || [ -f "$wal_cache_dir/sequences" ] || [ -f "$wal_cache_dir/colors.Xresources" ]; then
+            wal -R -n -e >/dev/null 2>&1 || true
+            post_apply
+            return 0
+        fi
+
+        if [ -f "$default_wallpaper" ]; then
+            write_wallpaper_state "$default_wallpaper"
+            wal -i "$default_wallpaper" --cols16 -n -e >/dev/null 2>&1 || true
+            post_apply
+            return 0
+        fi
+    fi
+
+    if wallpaper=$(current_wallpaper 2>/dev/null); then
+        if [ -f "$wallpaper" ]; then
+            write_fehbg "$wallpaper"
+            apply_fehbg
+        fi
+    fi
+}
+
+restore=false
+theme_name=
+theme_wallpaper=
+image_wallpaper=
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --restore)
+            restore=true
+            ;;
+        --theme)
+            [ "$#" -ge 2 ] || {
+                usage
+                exit 1
+            }
+            theme_name=$2
+            shift
+            ;;
+        --wallpaper)
+            [ "$#" -ge 2 ] || {
+                usage
+                exit 1
+            }
+            image_wallpaper=$2
+            shift
+            ;;
+        --set-wallpaper)
+            [ "$#" -ge 2 ] || {
+                usage
+                exit 1
+            }
+            theme_wallpaper=$2
+            shift
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ "$restore" = true ]; then
+    if [ -n "$theme_name" ] || [ -n "$image_wallpaper" ] || [ -n "$theme_wallpaper" ]; then
+        usage
+        exit 1
+    fi
+
+    restore_theme
+    exit 0
+fi
+
+if [ -n "$theme_name" ] && [ -n "$image_wallpaper" ]; then
+    usage
+    exit 1
+fi
+
+if [ -n "$image_wallpaper" ]; then
+    if [ ! -f "$image_wallpaper" ]; then
+        warn "Wallpaper not found: $image_wallpaper"
+        exit 1
+    fi
+
+    write_wallpaper_state "$image_wallpaper"
+    run_wal -i "$image_wallpaper" --cols16 -n
+    exit 0
+fi
+
+if [ -n "$theme_name" ]; then
+    if [ -n "$theme_wallpaper" ]; then
+        if [ ! -f "$theme_wallpaper" ]; then
+            warn "Wallpaper not found: $theme_wallpaper"
+            exit 1
+        fi
+
+        write_wallpaper_state "$theme_wallpaper"
+    fi
+
+    theme_name=$(normalize_theme "$theme_name")
+    run_wal --theme "$theme_name" --cols16 -n
+    exit 0
+fi
+
+usage
+exit 1

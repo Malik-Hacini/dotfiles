@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+set -eu
+
+config_home=${XDG_CONFIG_HOME:-$HOME/.config}
+cache_home=${XDG_CACHE_HOME:-$HOME/.cache}
+theme_switch="$HOME/.local/bin/theme-switch"
+dunst_conf="$cache_home/wal/dunstrc"
+
+if [ -x "$theme_switch" ]; then
+    "$theme_switch" --restore >/dev/null 2>&1 || true
+fi
+
+if command -v dunst >/dev/null 2>&1; then
+    if [ ! -f "$dunst_conf" ]; then
+        dunst_conf="$config_home/dunst/dunstrc"
+    fi
+
+    pkill dunst >/dev/null 2>&1 || true
+    dunst -conf "$dunst_conf" >/dev/null 2>&1 &
+fi
+
+killall polybar >/dev/null 2>&1 || true
+
+if [ -x "$config_home/polybar/launch_polybar.sh" ]; then
+    "$config_home/polybar/launch_polybar.sh"
+fi

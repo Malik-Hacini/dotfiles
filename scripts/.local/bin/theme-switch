@@ -4,8 +4,10 @@ set -eu
 config_home=${XDG_CONFIG_HOME:-$HOME/.config}
 cache_home=${XDG_CACHE_HOME:-$HOME/.cache}
 state_home=${XDG_STATE_HOME:-$HOME/.local/state}
+theme_state_dir="$state_home/theme-switch"
 wal_cache_dir="$cache_home/wal"
-wallpaper_state="$state_home/theme-switch/current-wallpaper"
+wallpaper_state="$theme_state_dir/current-wallpaper"
+managed_template_state="$theme_state_dir/managed-templates"
 template_source_dir="$config_home/theme-switch/templates"
 wal_template_dir="$config_home/wal/templates"
 default_wallpaper="$HOME/Pictures/Wallpapers/catppuccin_gyro.jpg"
@@ -31,18 +33,33 @@ normalize_theme() {
 }
 
 write_wallpaper_state() {
-    mkdir -p "$(dirname "$wallpaper_state")"
+    mkdir -p "$theme_state_dir"
     printf '%s\n' "$1" > "$wallpaper_state"
 }
 
 sync_templates() {
     [ -d "$template_source_dir" ] || return 0
 
-    mkdir -p "$wal_template_dir"
+    mkdir -p "$theme_state_dir" "$wal_template_dir"
+
+    if [ -f "$managed_template_state" ]; then
+        while IFS= read -r template_name; do
+            [ -n "$template_name" ] || continue
+            [ -f "$template_source_dir/$template_name" ] || rm -f "$wal_template_dir/$template_name"
+        done < "$managed_template_state"
+    fi
+
+    rm -f "$wal_template_dir/colors-wal.vim"
+
+    : > "$managed_template_state"
 
     for template in "$template_source_dir"/*; do
         [ -f "$template" ] || continue
-        install -m 0644 "$template" "$wal_template_dir/$(basename "$template")"
+
+        template_name=$(basename "$template")
+        rm -f "$wal_template_dir/$template_name"
+        ln -s "$template" "$wal_template_dir/$template_name"
+        printf '%s\n' "$template_name" >> "$managed_template_state"
     done
 }
 
@@ -50,9 +67,18 @@ link_generated_file() {
     source_file=$1
     target_file=$2
 
-    [ -e "$source_file" ] || return 0
-
     mkdir -p "$(dirname "$target_file")"
+
+    if [ ! -e "$source_file" ]; then
+        if [ -L "$target_file" ]; then
+            link_target=$(readlink "$target_file" || true)
+            case "$link_target" in
+                "$wal_cache_dir"/*) rm -f "$target_file" ;;
+            esac
+        fi
+        return 0
+    fi
+
     rm -f "$target_file"
     ln -s "$source_file" "$target_file"
 }
@@ -65,7 +91,7 @@ sync_generated_targets() {
 
     mkdir -p "$local_yazi_flavor_dir"
     link_generated_file "$wal_cache_dir/yazi-flavor.toml" "$local_yazi_flavor_dir/flavor.toml"
-    link_generated_file "$config_home/yazi/flavors/catppuccin-mocha.yazi/tmtheme.xml" "$local_yazi_flavor_dir/tmtheme.xml"
+    link_generated_file "$wal_cache_dir/yazi-tmtheme.xml" "$local_yazi_flavor_dir/tmtheme.xml"
 }
 
 current_wallpaper() {
@@ -127,6 +153,14 @@ reload_i3() {
     fi
 }
 
+reload_tmux() {
+    tmux_conf="$config_home/tmux/tmux.conf"
+
+    if command -v tmux >/dev/null 2>&1 && [ -f "$tmux_conf" ]; then
+        tmux source-file "$tmux_conf" >/dev/null 2>&1 || true
+    fi
+}
+
 run_wal() {
     if ! command -v wal >/dev/null 2>&1; then
         warn "wal (pywal16) is not installed."
@@ -144,6 +178,7 @@ restore_theme() {
             sync_templates
             wal -R -n -e >/dev/null 2>&1 || true
             post_apply
+            reload_tmux
             return 0
         fi
 
@@ -152,6 +187,7 @@ restore_theme() {
             sync_templates
             wal --theme catppuccin-mocha --cols16 -n -e >/dev/null 2>&1 || true
             post_apply
+            reload_tmux
             return 0
         fi
     fi
@@ -237,6 +273,7 @@ if [ -n "$image_wallpaper" ]; then
 
     write_wallpaper_state "$image_wallpaper"
     run_wal -i "$image_wallpaper" --cols16 -n -e
+    [ "$reload_after_apply" = true ] && reload_tmux
     [ "$reload_after_apply" = true ] && reload_i3
     exit 0
 fi
@@ -253,6 +290,7 @@ if [ -n "$theme_name" ]; then
 
     theme_name=$(normalize_theme "$theme_name")
     run_wal --theme "$theme_name" --cols16 -n -e
+    [ "$reload_after_apply" = true ] && reload_tmux
     [ "$reload_after_apply" = true ] && reload_i3
     exit 0
 fi

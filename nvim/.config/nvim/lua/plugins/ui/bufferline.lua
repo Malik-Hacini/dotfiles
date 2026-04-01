@@ -16,6 +16,20 @@ return {
         accent = "#fab387",
       }
 
+      local pywal_ok, pywal_colors = pcall(function()
+        return require("pywal16.core").get_colors()
+      end)
+
+      if pywal_ok and pywal_colors and vim.g.theme_switch_colorscheme == "pywal16" then
+        colors.text = pywal_colors.foreground or colors.text
+        colors.muted = pywal_colors.color8 or colors.muted
+        colors.mid = pywal_colors.background or colors.mid
+        colors.light = pywal_colors.color0 or colors.light
+        colors.accent = pywal_colors.color5 or colors.accent
+
+        return colors
+      end
+
       local palette_ok, palette = pcall(function()
         return require("catppuccin.palettes").get_palette("mocha")
       end)
@@ -99,9 +113,13 @@ return {
     end
 
     local function get_bufferline_highlights(colors)
+      if vim.g.theme_switch_colorscheme == "pywal16" then
+        return build_custom_highlights(colors)
+      end
+
       local ctp_ok, ctp_bufferline = pcall(require, "catppuccin.special.bufferline")
       if not ctp_ok then
-        return nil
+        return build_custom_highlights(colors)
       end
 
       return ctp_bufferline.get_theme({
@@ -112,46 +130,50 @@ return {
       })
     end
 
-    local colors = get_colors()
-
-    bufferline.setup({
-      highlights = get_bufferline_highlights(colors),
-      options = {
-        mode = "buffers",
-        custom_filter = function(buf_number)
-          return vim.bo[buf_number].filetype ~= "qf"
-        end,
-        color_icons = true,
-        separator_style = { "", "" },
-        indicator = { style = "none" },
-        buffer_close_icon = "󰅖",
-        close_command = "bdelete! %d",
-        right_mouse_command = "bdelete! %d",
-        diagnostics = false,
-        diagnostics_update_in_insert = false,
-        show_tab_indicators = false,
-        show_close_icon = false,
-        show_buffer_close_icons = true,
-        hover = { enabled = false },
-        sort_by = function(buffer_a, buffer_b)
-          return vim.fn.getftime(buffer_a.path) > vim.fn.getftime(buffer_b.path)
-        end,
-      },
-    })
-
-    local function set_tabline_hls()
+    local function set_tabline_hls(colors)
       vim.api.nvim_set_hl(0, "TabLine", { fg = colors.muted, bg = colors.mid })
       vim.api.nvim_set_hl(0, "TabLineFill", { bg = colors.mid })
       vim.api.nvim_set_hl(0, "TabLineSel", { fg = colors.text, bg = colors.light, bold = true })
     end
 
-    set_tabline_hls()
+    local function apply_theme()
+      local colors = get_colors()
+
+      bufferline.setup({
+        highlights = get_bufferline_highlights(colors),
+        options = {
+          mode = "buffers",
+          custom_filter = function(buf_number)
+            return vim.bo[buf_number].filetype ~= "qf"
+          end,
+          color_icons = true,
+          separator_style = { "", "" },
+          indicator = { style = "none" },
+          buffer_close_icon = "󰅖",
+          close_command = "bdelete! %d",
+          right_mouse_command = "bdelete! %d",
+          diagnostics = false,
+          diagnostics_update_in_insert = false,
+          show_tab_indicators = false,
+          show_close_icon = false,
+          show_buffer_close_icons = true,
+          hover = { enabled = false },
+          sort_by = function(buffer_a, buffer_b)
+            return vim.fn.getftime(buffer_a.path) > vim.fn.getftime(buffer_b.path)
+          end,
+        },
+      })
+
+      set_tabline_hls(colors)
+    end
+
+    apply_theme()
 
     local aug = vim.api.nvim_create_augroup("BufferlineStyling", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
       group = aug,
       callback = function()
-        vim.schedule(set_tabline_hls)
+        vim.schedule(apply_theme)
       end,
       desc = "Reapply bufferline and tabline highlights",
     })

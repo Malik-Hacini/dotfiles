@@ -29,11 +29,26 @@ local bufferline_module = safe_require("plugins.ui.bufferline")
 local web_devicons_module = safe_require("plugins.ui.nvim-web-devicons")
 local sessions_module = safe_require("plugins.ui.sessions")
 
--- Return plugin specs
-return {
-  colorscheme_module,
-  lualine_module,
-  bufferline_module,
-  web_devicons_module,
-  sessions_module,
-}
+local function append_specs(specs, module)
+  if type(module) ~= "table" then
+    return
+  end
+
+  if module[1] ~= nil and type(module[1]) == "table" then
+    for _, spec in ipairs(module) do
+      table.insert(specs, spec)
+    end
+    return
+  end
+
+  table.insert(specs, module)
+end
+
+local specs = {}
+append_specs(specs, colorscheme_module)
+append_specs(specs, lualine_module)
+append_specs(specs, bufferline_module)
+append_specs(specs, web_devicons_module)
+append_specs(specs, sessions_module)
+
+return specs

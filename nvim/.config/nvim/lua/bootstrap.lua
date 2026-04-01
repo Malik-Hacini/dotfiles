@@ -86,7 +86,7 @@ local function setup_lazy()
         { import = "plugins.lsp" }, -- lsp plugins directory
       }, {
         install = {
-          colorscheme = { "catppuccin" },
+          colorscheme = { "pywal16", "catppuccin" },
         },
         checker = {
           enabled = true,
@@ -127,7 +127,7 @@ local function setup_lazy()
         { import = "plugins.typst"},
       }, {
         install = {
-          colorscheme = { "catppuccin" },
+          colorscheme = { "pywal16", "catppuccin" },
         },
         checker = {
           enabled = true,

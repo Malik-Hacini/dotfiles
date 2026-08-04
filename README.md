@@ -76,7 +76,7 @@ Legacy installer log: `<repo>/install.log` (for the default clone path, `~/dotfi
 
 1. Open the keybindings cheatsheet with `Super + /`.
 2. Open Neovim and run `:checkhealth`.
-3. Launch and restart Zen once. A user path service links the dynamic CSS into the new profile automatically.
+3. Launch and restart Zen once. A user path service copies the dynamic CSS into the new profile automatically.
 4. If you use Julia in Neovim, bootstrap the local Julia LSP environment once:
 
 ```bash
@@ -141,7 +141,7 @@ All GNOME and GTK apps are themed using Catppuccin (Mocha flavor). This includes
 - source of truth: `zen/.config/zen/chrome/`
 - stowed to `~/.config/zen/chrome/`
 - Omarchy generates palette and logo assets from the active theme
-- `zen-dotfiles-profile.path` links the files into new Zen profiles automatically
+- `zen-dotfiles-profile.path` copies real files into new native or Flatpak Zen profiles automatically
 
 ## Stow 
 Each installer stows only the packages in its profile list.

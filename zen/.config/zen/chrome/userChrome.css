@@ -23,7 +23,18 @@
   --newtab-background-color: var(--omarchy-background) !important;
   --zen-themed-toolbar-bg: var(--omarchy-dark-background) !important;
   --zen-main-browser-background: var(--omarchy-dark-background) !important;
+  --zen-main-browser-background-toolbar: var(--omarchy-dark-background) !important;
   --toolbox-bgcolor-inactive: var(--omarchy-dark-background) !important;
+}
+
+#zen-browser-background {
+  --zen-main-browser-background: var(--omarchy-background) !important;
+  --zen-background-opacity: 1 !important;
+}
+
+#zen-toolbar-background {
+  --zen-main-browser-background-toolbar: var(--omarchy-background) !important;
+  --zen-background-opacity: 1 !important;
 }
 
 #permissions-granted-icon {
@@ -51,6 +62,11 @@ hbox#titlebar,
   color: var(--omarchy-accent) !important;
 }
 
+.urlbar-input::selection {
+  color: var(--omarchy-darker-background) !important;
+  background-color: var(--omarchy-accent) !important;
+}
+
 #zenEditBookmarkPanelFaviconContainer {
   background: var(--omarchy-darker-background) !important;
 }
@@ -74,6 +90,16 @@ toolbar .toolbarbutton-1 {
       fill: var(--omarchy-darker-background);
     }
   }
+}
+
+#PanelUI-menu-button .toolbarbutton-icon,
+#downloads-button .toolbarbutton-icon,
+#unified-extensions-button .toolbarbutton-icon,
+#PanelUI-menu-button .toolbarbutton-badge-stack,
+#downloads-button .toolbarbutton-badge-stack,
+#unified-extensions-button .toolbarbutton-badge-stack {
+  fill: var(--omarchy-accent) !important;
+  color: var(--omarchy-accent) !important;
 }
 
 .identity-color-blue {

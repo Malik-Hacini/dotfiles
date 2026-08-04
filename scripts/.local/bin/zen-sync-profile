@@ -3,49 +3,101 @@
 set -euo pipefail
 
 chrome_source="${XDG_CONFIG_HOME:-$HOME/.config}/zen/chrome"
+theme_dir="$HOME/.local/state/omarchy/current/theme"
 preference='user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+profile_roots=(
+  "$HOME/.zen"
+  "${XDG_CONFIG_HOME:-$HOME/.config}/zen"
+  "$HOME/.var/app/app.zen_browser.zen/.zen"
+  "$HOME/.var/app/app.zen_browser.zen/.config/zen"
+)
+profiles=()
+declare -A seen_profiles=()
 
 [[ -d $chrome_source ]] || exit 0
 
-if [[ ${1:-} == --wait ]]; then
-  for ((attempt = 0; attempt < 60; attempt++)); do
-    compgen -G "$HOME/.zen/*/prefs.js" >/dev/null && break
-    sleep 1
-  done
-fi
+collect_profiles() {
+  local root profile profile_real
 
-link_profile_file() {
-  local source=$1
-  local target=$2
-  local backup suffix=0
+  profiles=()
+  seen_profiles=()
 
-  if [[ -L $target ]] && [[ $(readlink -f "$target" 2>/dev/null || true) == $(readlink -f "$source") ]]; then
-    return
-  fi
-
-  if [[ -e $target || -L $target ]]; then
-    backup="${target}.pre-dotfiles"
-    while [[ -e $backup || -L $backup ]]; do
-      ((suffix += 1))
-      backup="${target}.pre-dotfiles${suffix}"
+  shopt -s nullglob
+  for root in "${profile_roots[@]}"; do
+    [[ -d $root ]] || continue
+    for profile in "$root"/*; do
+      [[ -d $profile && -f $profile/prefs.js ]] || continue
+      profile_real=$(readlink -f "$profile")
+      [[ -n ${seen_profiles[$profile_real]+x} ]] && continue
+      seen_profiles[$profile_real]=1
+      profiles+=("$profile")
     done
-    mv "$target" "$backup"
-    printf 'zen-sync-profile: backed up %s to %s\n' "$target" "$backup"
-  fi
-
-  ln -s "$source" "$target"
+  done
+  shopt -u nullglob
 }
 
-for profile in "$HOME"/.zen/*; do
-  [[ -f $profile/prefs.js ]] || continue
+if [[ ${1:-} == --wait ]]; then
+  for ((attempt = 0; attempt < 60; attempt++)); do
+    collect_profiles
+    ((${#profiles[@]})) && break
+    sleep 1
+  done
+else
+  collect_profiles
+fi
+
+if [[ -f $theme_dir/zen.css ]]; then
+  install -m 0644 "$theme_dir/zen.css" "$chrome_source/omarchy-theme.css"
+fi
+
+if [[ -f $theme_dir/zen-logo.svg ]]; then
+  install -m 0644 "$theme_dir/zen-logo.svg" "$chrome_source/zen-logo.svg"
+fi
+
+backup_profile_file() {
+  local target=$1
+  local backup="${target}.pre-omarchy"
+  local suffix=0
+
+  while [[ -e $backup || -L $backup ]]; do
+    ((suffix += 1))
+    backup="${target}.pre-omarchy${suffix}"
+  done
+
+  mv "$target" "$backup"
+  printf 'zen-sync-profile: backed up %s to %s\n' "$target" "$backup"
+}
+
+copy_profile_file() {
+  local source=$1
+  local target=$2
+  local marker=$3
+  local temporary
+
+  if [[ -L $target ]]; then
+    unlink "$target"
+  elif [[ -e $target && ! -f $marker ]]; then
+    backup_profile_file "$target"
+  fi
+
+  temporary=$(mktemp "${target}.tmp.XXXXXX")
+  install -m 0644 "$source" "$temporary"
+  mv -f "$temporary" "$target"
+}
+
+for profile in "${profiles[@]}"; do
   mkdir -p "$profile/chrome"
+  marker="$profile/chrome/.omarchy-theme-managed"
 
   for file in userChrome.css userContent.css omarchy-theme.css zen-logo.svg; do
-    [[ -e $chrome_source/$file ]] || continue
-    link_profile_file "$chrome_source/$file" "$profile/chrome/$file"
+    [[ -f $chrome_source/$file ]] || continue
+    copy_profile_file "$chrome_source/$file" "$profile/chrome/$file" "$marker"
   done
 
   if [[ ! -f $profile/user.js ]] || ! grep -Fqx "$preference" "$profile/user.js"; then
     printf '%s\n' "$preference" >> "$profile/user.js"
   fi
+
+  printf 'Managed by zen-sync-profile from %s\n' "$chrome_source" > "$marker"
+  printf 'zen-sync-profile: synchronized %s\n' "$profile"
 done

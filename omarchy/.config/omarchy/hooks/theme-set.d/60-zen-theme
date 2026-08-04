@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+command -v zen-sync-profile >/dev/null 2>&1 || exit 0
+zen-sync-profile
+
+if pgrep -x zen >/dev/null 2>&1 || pgrep -x zen-bin >/dev/null 2>&1 || pgrep -x zen-browser >/dev/null 2>&1; then
+  command -v omarchy-notification-send >/dev/null 2>&1 \
+    && omarchy-notification-send "Restart Zen to apply the new Omarchy theme"
+fi

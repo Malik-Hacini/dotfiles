@@ -25,6 +25,8 @@ Omarchy's active `colors.toml` drives Neovim and the user templates for Zathura 
 
 Run `omarchy theme refresh` after changing templates. The `theme-set` hook copies generated Zathura and Zen assets into their application config locations.
 
+Zen follows the same generated-theme model as DMS: Omarchy renders semantic colors, then `60-zen-theme` copies the tracked `userChrome.css`, `userContent.css`, generated palette, and generated logo as real files into every initialized Zen profile. The synchronizer backs up unmanaged CSS before taking ownership and writes the required `toolkit.legacyUserProfileCustomizations.stylesheets` preference to `user.js`. Restart Zen after a theme change to reload browser chrome reliably.
+
 ## Keybindings
 
 Omarchy's complete default keymap remains active, including workspace, navigation, grouping, brightness, clipboard, screenshot, screen-recording, media, and hardware shortcuts. The personal i3 application aliases are layered on top, including `Super+Q` to close a window and `Super+Z/N/G/O/D/T/P/Slash` for personal applications and menus.

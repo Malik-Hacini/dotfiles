@@ -3,6 +3,8 @@ Description=Apply dotfiles when Zen creates a browser profile
 
 [Path]
 PathChanged=%h/.zen
+PathChanged=%h/.config/zen
+PathChanged=%h/.var/app/app.zen_browser.zen
 Unit=zen-dotfiles-profile.service
 
 [Install]

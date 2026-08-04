@@ -1,5 +1,5 @@
 [Unit]
-Description=Link dynamic dotfiles CSS into Zen profiles
+Description=Copy dynamic dotfiles CSS into Zen profiles
 
 [Service]
 Type=oneshot

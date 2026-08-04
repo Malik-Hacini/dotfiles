@@ -76,6 +76,11 @@ export DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export LOG_FILE="$DOTFILES_DIR/install.log"
 export STOW_HAD_FAILURES=false
 
+if command -v omarchy >/dev/null 2>&1; then
+    printf '%s\n' "Omarchy detected. Use ./install-omarchy.sh instead of the legacy i3 installer." >&2
+    exit 1
+fi
+
 : > "$LOG_FILE"
 
 source "$DOTFILES_DIR/install/bootstrap.sh"

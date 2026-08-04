@@ -25,7 +25,7 @@ resolve_stow_repo_dir() {
 
 load_stow_packages() {
     local repo_dir=$1
-    local stow_list="$repo_dir/packages/stow_list.txt"
+    local stow_list=${STOW_LIST_FILE:-$repo_dir/packages/stow_list.txt}
 
     [ -f "$stow_list" ] || die "Missing stow list: $stow_list"
     mapfile -t STOW_PACKAGE_LIST < <(grep -vE '^\s*#|^\s*$' "$stow_list")
@@ -163,7 +163,9 @@ restow_package() {
     local -a command=(stow -R -d "$repo_dir" -t "$HOME" --no-folding "--ignore=$STOW_IGNORE_PATTERN" "$package")
 
     if [ "$STOW_DRY_RUN" = true ]; then
-        command=(stow -n -R -v -d "$repo_dir" -t "$HOME" --no-folding "--ignore=$STOW_IGNORE_PATTERN" "$package")
+        # Simulate adoption so targets already scheduled for backup do not show
+        # as false conflicts. Simulation mode never changes the repo or $HOME.
+        command=(stow -n -R -v --adopt -d "$repo_dir" -t "$HOME" --no-folding "--ignore=$STOW_IGNORE_PATTERN" "$package")
         info "[dry-run] Restowing package: $package"
     else
         command=(stow -R -v -d "$repo_dir" -t "$HOME" --no-folding "--ignore=$STOW_IGNORE_PATTERN" "$package")

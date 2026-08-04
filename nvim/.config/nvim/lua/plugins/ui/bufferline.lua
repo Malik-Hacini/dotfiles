@@ -6,28 +6,23 @@ return {
   config = function()
     local bufferline = require("bufferline")
 
-    local function get_colors()
-      local colors = {
-        text = "#cdd6f4",
-        muted = "#7f849c",
-        mid = "#1e1e2e",
-        light = "#313244",
-        accent = "#cba6f7",
-      }
-
-      local palette_ok, palette = pcall(function()
-        return require("catppuccin.palettes").get_palette("mocha")
-      end)
-
-      if palette_ok and palette then
-        colors.text = palette.text or colors.text
-        colors.muted = palette.overlay1 or colors.muted
-        colors.mid = palette.base or colors.mid
-        colors.light = palette.surface0 or colors.light
-        colors.accent = palette.mauve or colors.accent
+    local function highlight_color(group_name, key, fallback)
+      local ok, highlight = pcall(vim.api.nvim_get_hl, 0, { name = group_name, link = false })
+      if not ok or not highlight or not highlight[key] then
+        return fallback
       end
 
-      return colors
+      return string.format("#%06x", highlight[key])
+    end
+
+    local function get_colors()
+      return {
+        text = highlight_color("Normal", "fg", "#cdd6f4"),
+        muted = highlight_color("Comment", "fg", "#7f849c"),
+        mid = highlight_color("StatusLine", "bg", highlight_color("NormalFloat", "bg", "#1e1e2e")),
+        light = highlight_color("CursorLine", "bg", "#313244"),
+        accent = highlight_color("Function", "fg", "#cba6f7"),
+      }
     end
 
     local function get_zen_padding()
@@ -182,20 +177,6 @@ return {
       end
     end
 
-    local function get_bufferline_highlights(colors)
-      local ctp_ok, ctp_bufferline = pcall(require, "catppuccin.special.bufferline")
-      if not ctp_ok then
-        return nil
-      end
-
-      return ctp_bufferline.get_theme({
-        styles = {},
-        custom = {
-          all = build_custom_highlights(colors),
-        },
-      })
-    end
-
     local colors = get_colors()
 
     local function is_diffview_open()
@@ -208,9 +189,7 @@ return {
       vim.opt.showtabline = should_hide and 0 or 2
     end
 
-    bufferline.setup({
-      highlights = get_bufferline_highlights(colors),
-      options = {
+    local bufferline_options = {
         mode = "buffers",
         custom_filter = function(buf_number)
           return vim.bo[buf_number].filetype ~= "qf"
@@ -242,8 +221,17 @@ return {
         sort_by = function(buffer_a, buffer_b)
           return vim.fn.getftime(buffer_a.path) > vim.fn.getftime(buffer_b.path)
         end,
-      },
-    })
+    }
+
+    local function setup_bufferline()
+      colors = get_colors()
+      bufferline.setup({
+        highlights = build_custom_highlights(colors),
+        options = bufferline_options,
+      })
+    end
+
+    setup_bufferline()
 
     local function set_tabline_hls()
       colors = get_colors()
@@ -265,7 +253,10 @@ return {
     vim.api.nvim_create_autocmd("ColorScheme", {
       group = aug,
       callback = function()
-        vim.schedule(set_tabline_hls)
+        vim.schedule(function()
+          setup_bufferline()
+          set_tabline_hls()
+        end)
       end,
       desc = "Reapply bufferline and tabline highlights",
     })

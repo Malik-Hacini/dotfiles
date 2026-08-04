@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if command -v omarchy >/dev/null 2>&1; then
+    exec omarchy menu toggle system
+fi
+
 # Define the options
 OPTIONS="  Shutdown\n  Reboot\n󰍃  Logout\n  Lock\n  Suspend"
 

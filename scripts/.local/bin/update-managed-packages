@@ -269,6 +269,12 @@ update_system_packages() {
             sudo apt-get upgrade -y --with-new-pkgs || return 1
             ;;
         arch)
+            if command -v omarchy >/dev/null 2>&1; then
+                info "Updating Omarchy, system packages, and AUR packages through Omarchy..."
+                omarchy update -y || return 1
+                return 0
+            fi
+
             AUR_HELPER_CMD="$(current_aur_helper 2>/dev/null || true)"
             if [ -n "$AUR_HELPER_CMD" ]; then
                 info "Synchronizing pacman and AUR packages with $AUR_HELPER_CMD..."

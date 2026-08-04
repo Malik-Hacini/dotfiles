@@ -1,0 +1,4 @@
+# Portable tools and Wayland integrations unavailable in the Arch repositories.
+sesh-bin
+xdg-desktop-portal-termfilechooser
+juliaup

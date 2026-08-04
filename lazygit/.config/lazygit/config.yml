@@ -3,21 +3,21 @@ notARepository: skip
 gui:
   theme:
     activeBorderColor:
-      - '#89b4fa'
+      - blue
       - bold
     inactiveBorderColor:
-      - '#a6adc8'
+      - default
     optionsTextColor:
-      - '#89b4fa'
+      - blue
     selectedLineBgColor:
-      - '#313244'
+      - black
     cherryPickedCommitBgColor:
-      - '#45475a'
+      - black
     cherryPickedCommitFgColor:
-      - '#89b4fa'
+      - blue
     unstagedChangesColor:
-      - '#f38ba8'
+      - red
     defaultFgColor:
-      - '#cdd6f4'
+      - default
     searchingActiveBorderColor:
-      - '#f9e2af'
+      - yellow

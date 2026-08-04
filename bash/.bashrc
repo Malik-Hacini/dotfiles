@@ -1,3 +1,9 @@
+if [[ -r /usr/share/omarchy/default/bash/env-bootstrap ]]; then
+    [[ $- != *i* ]] && return
+    source /usr/share/omarchy/default/bash/env-bootstrap
+    source "$OMARCHY_PATH/default/bash/rc"
+    _dotfiles_omarchy=true
+else
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -116,7 +122,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
-eval "$(starship init bash)"
+fi
+
+if [ "${_dotfiles_omarchy:-false}" != true ] && command -v starship >/dev/null 2>&1; then
+    eval "$(starship init bash)"
+fi
 # starship config is at ~/.config/starship.toml (XDG default, no STARSHIP_CONFIG needed)
 
 alias python=python3
@@ -144,3 +154,5 @@ if [ -d "$HOME/.juliaup/bin" ]; then
 fi
 
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+unset _dotfiles_omarchy

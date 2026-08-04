@@ -56,7 +56,7 @@ local function setup_lazy()
         version = "*",
       },
       install = {
-        colorscheme = { "catppuccin" },
+        colorscheme = { "aether" },
       },
       checker = {
         enabled = true,

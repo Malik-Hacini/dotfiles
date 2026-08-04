@@ -19,12 +19,12 @@ truncation_length = 3
 fish_style_pwd_dir_length = 1
 
 [character]
-success_symbol = "[➜](bold #74c7ec)"
-error_symbol = "[➜](bold #f38ba8)"
-vimcmd_symbol = "[➜](bold #74c7ec)"
-vimcmd_visual_symbol = "[➜](bold #74c7ec)"
-vimcmd_replace_symbol = "[➜](bold #74c7ec)"
-vimcmd_replace_one_symbol = "[➜](bold #74c7ec)"
+success_symbol = "[➜](bold cyan)"
+error_symbol = "[➜](bold red)"
+vimcmd_symbol = "[➜](bold cyan)"
+vimcmd_visual_symbol = "[➜](bold cyan)"
+vimcmd_replace_symbol = "[➜](bold cyan)"
+vimcmd_replace_one_symbol = "[➜](bold cyan)"
 
 [python]
 symbol = ""
@@ -36,12 +36,12 @@ detect_folders = []
 
 [cmd_duration]
 min_time = 2000
-format = "[󰔛 $duration](#6c7086) "
+format = "[󰔛 $duration](bright-black) "
 show_milliseconds = false
 
 [git_branch]
 symbol = " "
-style = "fg:#b4befe bg:#313244"
-format = "[](fg:#313244)[$symbol$branch]($style)[](fg:#313244)"
+style = "fg:bright-magenta bg:black"
+format = "[](fg:black)[$symbol$branch]($style)[](fg:black)"
 truncation_length = 24
 truncation_symbol = "…"

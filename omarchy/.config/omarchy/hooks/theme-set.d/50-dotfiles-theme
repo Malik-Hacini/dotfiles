@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+theme_dir="$HOME/.local/state/omarchy/current/theme"
+
+if [[ -f $theme_dir/zathura.theme ]]; then
+  mkdir -p "$HOME/.config/zathura"
+  install -m 0644 "$theme_dir/zathura.theme" "$HOME/.config/zathura/omarchy-theme"
+fi
+
+if [[ -f $theme_dir/zen.css ]]; then
+  chrome_source="$HOME/.config/zen/chrome"
+  mkdir -p "$chrome_source"
+  install -m 0644 "$theme_dir/zen.css" "$chrome_source/omarchy-theme.css"
+  [[ ! -f $theme_dir/zen-logo.svg ]] || install -m 0644 "$theme_dir/zen-logo.svg" "$chrome_source/zen-logo.svg"
+  command -v zen-sync-profile >/dev/null 2>&1 && zen-sync-profile
+fi
+
+if pgrep -x qutebrowser >/dev/null 2>&1; then
+  qutebrowser ':config-source' >/dev/null 2>&1 || true
+fi

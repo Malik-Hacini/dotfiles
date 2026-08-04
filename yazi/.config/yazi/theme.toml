@@ -1,6 +1,5 @@
-
+# Use Yazi's ANSI-based defaults so the terminal palette supplied by Omarchy
+# determines both dark and light colors.
 [flavor]
-dark = "catppuccin-mocha"
-light = "catppuccin-mocha"
- 
-
+dark = ""
+light = ""

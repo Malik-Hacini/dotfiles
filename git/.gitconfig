@@ -1,4 +1,5 @@
 [user]
 	useConfigOnly = true
 [include]
+	path = ~/.config/git/config
 	path = ~/.gitconfig.local

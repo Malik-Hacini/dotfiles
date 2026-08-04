@@ -19,7 +19,8 @@ show_help() {
 Usage: force-stow-dotfiles [OPTIONS] [PACKAGE...]
 
 Back up conflicting target files in $HOME, then restow the selected packages.
-If no package names are given, all packages from packages/stow_list.txt are used.
+With no package names, the Omarchy profile is selected automatically on
+Omarchy systems; other systems use packages/stow_list.txt.
 
 Options:
   --repo-dir PATH     Dotfiles repo root (default: current repo, $PWD, or ~/dotfiles)
@@ -74,6 +75,9 @@ main() {
     fi
 
     if [ ${#packages[@]} -eq 0 ]; then
+        if [ -z "${STOW_LIST_FILE:-}" ] && command -v omarchy >/dev/null 2>&1 && [ -f "$repo_dir/packages/stow_list.omarchy.txt" ]; then
+            STOW_LIST_FILE="$repo_dir/packages/stow_list.omarchy.txt"
+        fi
         load_stow_packages "$repo_dir"
         packages=("${STOW_PACKAGE_LIST[@]}")
     fi

@@ -40,7 +40,7 @@ return {
         char = "│",
         underline = false, -- underline the start of the scope
         only_current = false, -- only show scope in the current window
-        hl = "CatppuccinOverlay0", ---@type string|string[] hl group for scopes
+        hl = "Comment", ---@type string|string[] hl group for scopes
       },
     },
     input = {

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+chrome_source="${XDG_CONFIG_HOME:-$HOME/.config}/zen/chrome"
+preference='user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+
+[[ -d $chrome_source ]] || exit 0
+
+if [[ ${1:-} == --wait ]]; then
+  for ((attempt = 0; attempt < 60; attempt++)); do
+    compgen -G "$HOME/.zen/*/prefs.js" >/dev/null && break
+    sleep 1
+  done
+fi
+
+link_profile_file() {
+  local source=$1
+  local target=$2
+  local backup suffix=0
+
+  if [[ -L $target ]] && [[ $(readlink -f "$target" 2>/dev/null || true) == $(readlink -f "$source") ]]; then
+    return
+  fi
+
+  if [[ -e $target || -L $target ]]; then
+    backup="${target}.pre-dotfiles"
+    while [[ -e $backup || -L $backup ]]; do
+      ((suffix += 1))
+      backup="${target}.pre-dotfiles${suffix}"
+    done
+    mv "$target" "$backup"
+    printf 'zen-sync-profile: backed up %s to %s\n' "$target" "$backup"
+  fi
+
+  ln -s "$source" "$target"
+}
+
+for profile in "$HOME"/.zen/*; do
+  [[ -f $profile/prefs.js ]] || continue
+  mkdir -p "$profile/chrome"
+
+  for file in userChrome.css userContent.css omarchy-theme.css zen-logo.svg; do
+    [[ -e $chrome_source/$file ]] || continue
+    link_profile_file "$chrome_source/$file" "$profile/chrome/$file"
+  done
+
+  if [[ ! -f $profile/user.js ]] || ! grep -Fqx "$preference" "$profile/user.js"; then
+    printf '%s\n' "$preference" >> "$profile/user.js"
+  fi
+done

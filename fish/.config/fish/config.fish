@@ -110,6 +110,11 @@ if test -d /usr/local/cuda
 end
 
 # User bin directories (only if installed)
+if test -d /usr/share/omarchy/bin
+    set -gx OMARCHY_PATH /usr/share/omarchy
+    fish_add_path /usr/share/omarchy/bin
+end
+
 for path_dir in $HOME/.fzf/bin $HOME/.local/bin $HOME/.juliaup/bin $HOME/.opencode/bin $HOME/bin
     if test -d $path_dir
         fish_add_path $path_dir
@@ -120,13 +125,15 @@ end
 set -gx GTK_USE_PORTAL 1
 
 # Sync GUI/session environment from systemd user manager.
-# This keeps long-lived shells (tmux/resurrect) aligned with the active X11 session.
+# This keeps long-lived shells and resurrected tmux sessions aligned with X11 or Wayland.
 if status is-interactive
     if type -q systemctl
         for entry in (systemctl --user show-environment 2>/dev/null)
             switch $entry
                 case 'DISPLAY=*'
                     set -gx DISPLAY (string sub -s 9 -- $entry)
+                case 'WAYLAND_DISPLAY=*'
+                    set -gx WAYLAND_DISPLAY (string sub -s 17 -- $entry)
                 case 'XAUTHORITY=*'
                     set -gx XAUTHORITY (string sub -s 12 -- $entry)
                 case 'DBUS_SESSION_BUS_ADDRESS=*'
@@ -139,13 +146,17 @@ if status is-interactive
                     set -gx XDG_CURRENT_DESKTOP (string sub -s 21 -- $entry)
                 case 'I3SOCK=*'
                     set -gx I3SOCK (string sub -s 8 -- $entry)
+                case 'HYPRLAND_INSTANCE_SIGNATURE=*'
+                    set -gx HYPRLAND_INSTANCE_SIGNATURE (string sub -s 29 -- $entry)
+                case 'OMARCHY_PATH=*'
+                    set -gx OMARCHY_PATH (string sub -s 14 -- $entry)
             end
         end
     end
 
     # Also refresh tmux server env for new panes/windows.
     if set -q TMUX
-        for key in DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR XDG_SESSION_TYPE XDG_CURRENT_DESKTOP I3SOCK
+        for key in DISPLAY WAYLAND_DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR XDG_SESSION_TYPE XDG_CURRENT_DESKTOP I3SOCK HYPRLAND_INSTANCE_SIGNATURE OMARCHY_PATH
             if set -q $key
                 tmux set-environment -g $key $$key >/dev/null 2>&1
             end

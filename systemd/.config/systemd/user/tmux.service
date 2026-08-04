@@ -4,6 +4,8 @@ Documentation=man:tmux(1)
 
 [Service]
 Type=forking
+Environment=OMARCHY_PATH=/usr/share/omarchy
+Environment=PATH=/usr/share/omarchy/bin:%h/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin
 ExecStart=/usr/bin/env tmux new-session -d
 
 ExecStop=/usr/bin/env bash -lc 'tmux ls >/dev/null 2>&1 && "%h/.tmux/plugins/tmux-resurrect/scripts/save.sh" || true'

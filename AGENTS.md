@@ -2,15 +2,13 @@
 
 ## Overview
 
-This repository is a GNU Stow-managed dotfiles setup for a keyboard-first Ubuntu/Debian or Arch-based workstation.
+This repository is a GNU Stow-managed dotfiles setup for a keyboard-first Omarchy/Hyprland workstation, while retaining a legacy i3 profile for standalone Ubuntu/Debian and Arch systems.
 It is organized as package directories that mirror the final paths under `$HOME`.
 
-- Primary platform: Ubuntu/Debian and Arch-based distros on X11
-- Window manager: `i3`
-- Compositor: `picom`
-- Status bar: `polybar`
-- Launcher: `rofi`
-- Notifications: `dunst`
+- Primary platform: Omarchy on Arch Linux and Wayland
+- Primary window manager: `Hyprland`
+- Desktop shell, launcher, notifications, and lock screen: Omarchy
+- Legacy desktop profile: `i3`, `picom`, `polybar`, `rofi`, and `dunst` on X11
 - Terminal: `kitty`
 - Shell: `fish`
 - Prompt: `starship`
@@ -20,7 +18,7 @@ It is organized as package directories that mirror the final paths under `$HOME`
 - Browser stack: `Zen Browser` for daily use, `qutebrowser` config also present
 - AI tooling: `OpenCode`, including Neovim integration
 
-Treat this repo as one integrated workstation, not a bag of unrelated configs: shell, tmux, i3, portals, scripts, and editor behavior are intentionally coupled.
+Treat this repo as one integrated workstation, not a bag of unrelated configs: shell, tmux, Hyprland/i3, portals, scripts, and editor behavior are intentionally coupled.
 
 ## Stow Model
 
@@ -38,7 +36,7 @@ Rules for changes:
 - After adding, removing, renaming, or moving files inside a stow package, rerun Stow for that package so `$HOME` matches the repo source-of-truth (for example: `stow -R -t "$HOME" opencode` from the repo root).
 - New files created in the repo do not appear under `$HOME` until the affected package is re-stowed.
 - If the target path in `$HOME` already exists as a real file or directory instead of a symlink, inspect it first, merge or back it up if needed, and then re-stow rather than editing the live copy and leaving the repo out of sync.
-- If you add a new stowable package, update `packages/stow_list.txt`.
+- If you add a new stowable package, update the relevant profile list: `packages/stow_list.omarchy.txt` and/or `packages/stow_list.txt`.
 - Keep root-only repo files out of Stow unless they are meant to land in `$HOME`.
 - Respect `.stow-local-ignore`; it intentionally excludes root repo metadata and some machine-local runtime files.
 
@@ -69,6 +67,7 @@ Good patterns already used in this repo:
 - CUDA setup is conditional.
 - `polybar` hardware names are auto-detected.
 - `i3` includes a machine-local `~/.config/i3/local.conf`.
+- Omarchy retains its machine-local `~/.config/hypr/monitors.lua`.
 - Git identity is delegated to `~/.gitconfig.local`.
 - secrets/env vars live in `~/.config/fish/local.fish`.
 
@@ -180,7 +179,7 @@ Some subdirectories also contain upstream/vendor READMEs. Treat those as third-p
 
 ## Practical Defaults For Agents
 
-- Assume Ubuntu/Debian, X11, `i3`, `fish`, `kitty`, and GNU Stow unless a file clearly targets something else.
+- Detect the active profile first. On Omarchy, preserve Omarchy ownership and use `packages/stow_list.omarchy.txt`; otherwise preserve the legacy X11/i3 behavior.
 - Prefer repo-relative config edits over changing live state in `$HOME`.
 - Prefer machine-local override files for identity, secrets, and hardware-specific behavior.
 - When adding automation, keep it idempotent and safe for repeated bootstrap/stow runs.

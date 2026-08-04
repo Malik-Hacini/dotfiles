@@ -1,0 +1,9 @@
+[Unit]
+Description=Apply dotfiles when Zen creates a browser profile
+
+[Path]
+PathChanged=%h/.zen
+Unit=zen-dotfiles-profile.service
+
+[Install]
+WantedBy=default.target

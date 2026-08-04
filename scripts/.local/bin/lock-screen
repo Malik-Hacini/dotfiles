@@ -2,6 +2,10 @@
 
 set -u
 
+if [ "${XDG_SESSION_TYPE:-}" = wayland ] && command -v omarchy >/dev/null 2>&1; then
+    exec omarchy system lock
+fi
+
 SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 REPO_DIR=$(cd "$(dirname "$SCRIPT_PATH")/../../.." && pwd)
 

@@ -2,7 +2,7 @@
 Type=Application
 Name=Yazi File Manager
 Comment=Blazing fast terminal file manager written in Rust
-Exec=yazi %u
+Exec=yazi %f
 TryExec=yazi
 Terminal=true
 Icon=yazi

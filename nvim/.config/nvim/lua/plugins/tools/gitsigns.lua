@@ -68,24 +68,9 @@ return {
         -- Reset sign column background to match normal text background
         vim.cmd [[highlight! link SignColumn Normal]]
 
-        -- Set consistent colors for git signs
-        -- Light blue for new/added items
-        local add_color = "#4fa6ed"      -- Light blue
-        -- Soft rust orange for modified items
-        local change_color = "#e78a4e"   -- Soft rust orange
-        -- Error red for deleted items
-        local delete_color = "#fb4934"   -- Red
-        
-        -- Create highlight groups that can be referenced elsewhere
-        vim.api.nvim_set_hl(0, "GitSignsAddColor", { fg = add_color })
-        vim.api.nvim_set_hl(0, "GitSignsChangeColor", { fg = change_color })
-        vim.api.nvim_set_hl(0, "GitSignsDeleteColor", { fg = delete_color })
-        
-        -- Apply these colors to GitSigns
-        vim.api.nvim_set_hl(0, "GitSignsAdd", { fg = add_color, bg = "NONE" })
-        vim.api.nvim_set_hl(0, "GitSignsChange", { fg = change_color, bg = "NONE" })
-        vim.api.nvim_set_hl(0, "GitSignsDelete", { fg = delete_color, bg = "NONE" })
-        
+        vim.cmd [[highlight! link GitSignsAdd DiagnosticOk]]
+        vim.cmd [[highlight! link GitSignsChange DiagnosticWarn]]
+        vim.cmd [[highlight! link GitSignsDelete DiagnosticError]]
       end,
       group = vim.api.nvim_create_augroup("GitSignsHighlight", { clear = true }),
     })

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Sxiv (Workspace Tabs)
-Comment=Open images in i3 workspace-local tabbed containers
-Exec=/usr/bin/env sxiv-tabbed %U
+Name=Image Viewer
+Comment=Open images in imv on Wayland or workspace tabs on i3
+Exec=/usr/bin/env sxiv-tabbed %F
 Terminal=false
 Categories=Graphics;Viewer;
 MimeType=image/jpeg;image/png;image/gif;image/bmp;image/tiff;image/webp;

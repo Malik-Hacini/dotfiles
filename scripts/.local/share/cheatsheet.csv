@@ -1,38 +1,17 @@
-# i3
-Super + Enter | Open terminal
-Super + d | App launcher
-Super + / | Keybinding cheatsheet
+# Omarchy · Personal shortcuts
+Super + q | Close window
+Super + z | Open Zen browser
 Super + n | Open Neovim
 Super + g | Open Lazygit
-Super + z | Open Zen browser
+Super + o | Open OpenCode
+Super + d | Application launcher
 Super + t | Tmux session picker
 Super + p | Power menu
-# i3 · Navigation
-Super + h/j/k/l | Focus left/down/up/right
-Super + 1-0 | Switch to workspace 1-10
-Super + Tab | Last used workspace
-# i3 · Windows
-Super + q | Close window
-Super + f | Toggle fullscreen
-Super + Shift + Space | Toggle floating / tiling
-Super + Space | Switch focus floating / tiling
-Super + v | Split vertically
-Super + s | Toggle split / stacking layout
-Super + w | Tabbed layout
-Super + a | Focus parent container
-# i3 · Move
-Super + Shift + h/j/k/l | Move window left/down/up/right
-Super + Shift + 1-0 | Move container to workspace 1-10
-# i3 · Resize (Super + r)
-h / l | Shrink / grow width
-j / k | Grow / shrink height
-Enter / Escape | Exit resize mode
-# i3 · System
-Super + Shift + c | Reload i3 config
-Super + Shift + r | Restart i3
-Print | Screenshot (Flameshot)
-Volume keys | Volume up / down / mute
-# tmux (prefix: Alt+2)
+Super + / | Personal keybinding cheatsheet
+Super + Enter | Open terminal (Omarchy default)
+Super + k | Full Omarchy keybinding search
+Print | Screenshot (Omarchy default)
+# tmux (prefix: Alt+Tab)
 prefix Enter | New window
 prefix q | Kill window
 prefix v | Split pane vertically
@@ -40,9 +19,9 @@ prefix Tab | Toggle last window
 prefix h/j/k/l | Select pane left/down/up/right
 prefix R | Reload tmux config
 # Neovim
-Super + n | Open Neovim (i3)
+Super + n | Open Neovim (Hyprland)
 Space + fk | Search all keymaps
-i (dashboard) | Open cheatsheet
+i (dashboard) | Open Neovim config information
 # Yazi
 y | Open Yazi (Terminal)
 Space + e | Open Yazi (Neovim)
@@ -58,7 +37,7 @@ r | Rename
 / | Find file
 s / S | Search by name / content
 z/Z | fzf/ zoxide fzf
-# Rofi
+# Omarchy menus
 Super + d | App launcher
 Super + t | Tmux session picker
 Super + p | Power menu

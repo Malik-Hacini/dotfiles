@@ -1,1 +1,1 @@
-theme switcher (wip in pywal-dev branch)
+- [x] Drive application colors from Omarchy's active theme.

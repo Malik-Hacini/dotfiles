@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+if [[ ${XDG_SESSION_TYPE:-} == wayland || ${XDG_CURRENT_DESKTOP:-} == *Hyprland* ]]; then
+  exec imv "$@"
+fi
+
 workspace_name() {
   i3-msg -t get_workspaces | jq -r '.[] | select(.focused == true).name' | head -n1
 }

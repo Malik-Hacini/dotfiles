@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # rofi-cheatsheet — searchable keybinding cheatsheet via rofi
-# Triggered by Super+/ in i3
+# Triggered by Super+/ in i3 or Hyprland
 #
 # Features:
 #   - Section headers appear whenever a matching entry exists ("sticky headers")
@@ -126,9 +126,16 @@ done < "$CHEATSHEET"
 # Display in rofi
 # ---------------------------------------------------------------------------
 
-printf '%s' "$output" | rofi -dmenu -i \
-    -p "" \
-    -markup-rows \
-    -theme ~/.config/rofi/cheatsheet.rasi \
-    -no-custom \
-    > /dev/null
+if command -v omarchy >/dev/null 2>&1; then
+    printf '%s' "$output" \
+        | sed -E 's/<span size="1">.*<\/span>//' \
+        | omarchy menu select "Keybindings" -- --width 900 --height 600 \
+        > /dev/null || true
+else
+    printf '%s' "$output" | rofi -dmenu -i \
+        -p "" \
+        -markup-rows \
+        -theme ~/.config/rofi/cheatsheet.rasi \
+        -no-custom \
+        > /dev/null
+fi

@@ -1,0 +1,6 @@
+[Unit]
+Description=Link dynamic dotfiles CSS into Zen profiles
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/zen-sync-profile --wait

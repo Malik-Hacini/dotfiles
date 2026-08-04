@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# rofi-tmux-sessions — pick or create tmux sessions via sesh and rofi
+# rofi-tmux-sessions — pick or create tmux sessions via sesh
 set -uo pipefail
 
 ROFI_THEME="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/tmux-sessions.rasi"
 
 # Launch a terminal that connects through sesh
 launch_terminal() {
+  if command -v omarchy >/dev/null 2>&1; then
+    omarchy launch tui sesh connect "$@"
+    return
+  fi
+
   local terminal="${TERMINAL:-kitty}"
   local cmd="exec ${terminal} sesh connect"
   for arg in "$@"; do
@@ -17,9 +22,13 @@ launch_terminal() {
 exit_code=0
 sessions="$(sesh list -d -c -t 2>/dev/null || true)"
 
-selected="$(printf '%s' "$sessions" | rofi -dmenu -i -p " sesh" \
-    -theme "$ROFI_THEME" \
-    -theme-str 'inputbar { enabled: true; } entry { placeholder: ""; }')" || exit_code=$?
+if command -v omarchy >/dev/null 2>&1; then
+  selected="$(printf '%s\n' "$sessions" | omarchy menu select "sesh" -- --width 800 --height 500)" || exit_code=$?
+else
+  selected="$(printf '%s' "$sessions" | rofi -dmenu -i -p " sesh" \
+      -theme "$ROFI_THEME" \
+      -theme-str 'inputbar { enabled: true; } entry { placeholder: ""; }')" || exit_code=$?
+fi
 
 # Exit code 1 = user cancelled (Escape)
 [ "$exit_code" -eq 1 ] && exit 0

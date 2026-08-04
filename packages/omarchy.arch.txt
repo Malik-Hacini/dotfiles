@@ -1,0 +1,26 @@
+# Packages from the personal workstation profile that Omarchy does not already
+# provide through pacman or mise. X11/i3 replacements are intentionally absent.
+stow
+wget
+bc
+7zip
+cmake
+python-pip
+python-pipx
+zsh
+fish
+yazi
+typst
+kitty
+flatpak
+playerctl
+mediainfo
+perl-image-exiftool
+zathura
+zathura-pdf-poppler
+texlive-binextra
+vlc
+qutebrowser
+ttf-roboto-mono-nerd
+ttf-nerd-fonts-symbols
+otf-font-awesome

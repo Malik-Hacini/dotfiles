@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Zathura
-Comment=Open PDFs in Zathura, using workspace tabs when i3 supports them
+Comment=Open PDFs in workspace-local Zathura tabs on Hyprland or i3
 Exec=/usr/bin/env zathura-tabbed %U
 Terminal=false
 Categories=Office;Viewer;

@@ -159,12 +159,10 @@ termcmd="${TERMCMD:-xdg-terminal-exec}"
 
 if command -v yazi >/dev/null 2>&1; then
     "$termcmd" \
-        --title "File Chooser" \
         yazi "$@" \
         </dev/null >/dev/null 2>&1
 elif command -v fish >/dev/null 2>&1; then
     "$termcmd" \
-        --title "File Chooser" \
         fish -l -c 'command -q yazi; and yazi $argv' "$@" \
         </dev/null >/dev/null 2>&1
 else

@@ -13,6 +13,7 @@ set selection-clipboard clipboard
 set render-loading true
 set window-width 1280
 set window-height 1080
+set window-title-basename true
 set adjust-open "best-fit"
 set guioptions sv # Remove all GUI elements (menubar, statusbar, scrollbars)
 set scroll-step 40 # Increase scroll speed

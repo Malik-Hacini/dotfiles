@@ -29,7 +29,7 @@ Run `omarchy theme refresh` after changing templates. The `theme-set` hook copie
 
 Omarchy's complete default keymap remains active, including workspace, navigation, grouping, brightness, clipboard, screenshot, screen-recording, media, and hardware shortcuts. The personal i3 application aliases are layered on top, including `Super+Q` to close a window and `Super+Z/N/G/O/D/T/P/Slash` for personal applications and menus.
 
-Five exact keys conflict with Omarchy defaults and are intentionally reassigned: `Super+G` (grouping), `Super+O` (pop-out), `Super+T` (floating), `Super+P` (pseudo), and `Super+Slash` (monitor scale up). The rest of Omarchy's bindings are unchanged. Run `omarchy menu keybindings` or press `Super+K` to search the complete active map.
+Personal navigation also assigns `Super+H/J/K/L` to focus left/down/up/right. This replaces Omarchy's actions on `Super+J/K/L`; `Super+H` was free. Five application keys are also intentionally reassigned: `Super+G` (grouping), `Super+O` (pop-out), `Super+T` (floating), `Super+P` (pseudo), and `Super+Slash` (monitor scale up). Global `Alt+Tab` is disabled so tmux can use it as the personal prefix; `Shift+Alt+Tab` remains an Omarchy window-navigation binding.
 
 Workspace-local PDF/image tab containers remain an i3-only feature and fall back to normal Zathura/imv windows on Wayland.
 

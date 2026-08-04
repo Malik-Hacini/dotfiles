@@ -9,7 +9,7 @@ Super + t | Tmux session picker
 Super + p | Power menu
 Super + / | Personal keybinding cheatsheet
 Super + Enter | Open terminal (Omarchy default)
-Super + k | Full Omarchy keybinding search
+Super + h/j/k/l | Focus left/down/up/right
 Print | Screenshot (Omarchy default)
 # tmux (prefix: Alt+Tab)
 prefix Enter | New window

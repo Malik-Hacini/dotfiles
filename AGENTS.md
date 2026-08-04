@@ -9,7 +9,7 @@ It is organized as package directories that mirror the final paths under `$HOME`
 - Primary window manager: `Hyprland`
 - Desktop shell, launcher, notifications, and lock screen: Omarchy
 - Legacy desktop profile: `i3`, `picom`, `polybar`, `rofi`, and `dunst` on X11
-- Terminal: `kitty`
+- Terminal: `foot` by default, with `kitty` retained
 - Shell: `fish`
 - Prompt: `starship`
 - Editor: `neovim`
@@ -91,7 +91,7 @@ Many configs depend on session environment propagation across X11, systemd user 
 - `tmux/.config/tmux/tmux.conf` updates/propagates GUI/session env so reattached sessions still work with `i3`, clipboard, and portals.
 - `x11/.xprofile` and `fish` both set `GTK_USE_PORTAL=1`.
 - `xdg-desktop-portal/.config/xdg-desktop-portal/portals.conf` routes file chooser requests to `termfilechooser`.
-- `xdg-desktop-portal-termfilechooser/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh` launches `yazi` in `kitty` via `fish` or directly, depending on what is available in the service environment.
+- `xdg-desktop-portal-termfilechooser/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh` launches `yazi` through the selected XDG terminal via `fish` or directly, depending on what is available in the service environment.
 
 Be careful when changing shell startup, portal, tmux, i3 startup, or PATH logic: small changes can break file pickers, clipboard behavior, image previews, or GUI app launches from reused sessions.
 
@@ -103,7 +103,7 @@ Be careful when changing shell startup, portal, tmux, i3 startup, or PATH logic:
 - `sddm/`: system-level SDDM theme assets copied into place by the installer
 - `fish/`, `bash/`, `starship/`, `git/`: shell and CLI environment
 - `i3/`, `picom/`, `polybar/`, `rofi/`, `dunst/`, `x11/`, `gtk/`: desktop/X11 stack
-- `kitty/`, `tmux/`, `lazygit/`, `fastfetch/`, `btop/`: terminal tooling
+- `foot/`, `kitty/`, `tmux/`, `lazygit/`, `fastfetch/`, `btop/`: terminal tooling
 - `nvim/`: Neovim config
 - `yazi/`, `zathura/`, `qutebrowser/`: application configs
 - `xdg-desktop-portal/`, `xdg-desktop-portal-termfilechooser/`: portal routing and terminal file chooser integration

@@ -2,8 +2,8 @@
 Type=Application
 Name=Neovim
 Comment=Edit text files in Neovim
-Exec=kitty -- nvim %F
-TryExec=kitty
+Exec=xdg-terminal-exec -- nvim %F
+TryExec=xdg-terminal-exec
 Terminal=false
 Icon=nvim
 Categories=Utility;TextEditor;ConsoleOnly;

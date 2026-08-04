@@ -3,6 +3,7 @@ fish
 starship
 git
 kitty
+foot
 nvim
 yazi
 zathura

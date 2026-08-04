@@ -12,6 +12,7 @@ fish
 yazi
 typst
 kitty
+foot
 flatpak
 playerctl
 mediainfo

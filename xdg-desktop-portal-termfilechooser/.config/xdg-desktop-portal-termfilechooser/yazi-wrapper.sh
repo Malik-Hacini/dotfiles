@@ -1,11 +1,11 @@
 #!/bin/sh
-# Wrapper script for xdg-desktop-portal-termfilechooser -> yazi (in kitty)
+# Wrapper script for xdg-desktop-portal-termfilechooser -> yazi
 # Launched by the portal service when a GTK app (e.g. Zen Browser) opens a file dialog.
 #
 # The portal service inherits this script's stdio. Yazi and its image preview
 # adapters emit terminal graphics escape sequences (Kitty protocol, DEC private modes) that
 # the portal's VTE parser cannot handle, causing parse errors and slowdowns.
-# We fully redirect stdio away from the portal and ensure kitty runs with
+# We fully redirect stdio away from the portal and ensure the terminal runs with
 # a valid graphical/session environment.
 
 set -e
@@ -153,9 +153,9 @@ if [ -n "$path" ]; then
     set -- "$@" "$path"
 fi
 
-# Launch kitty. Redirect all stdio so the portal process does not parse
+# Launch the selected XDG terminal. Redirect all stdio so the portal does not parse
 # terminal control sequences coming from yazi image previews.
-termcmd="${TERMCMD:-kitty}"
+termcmd="${TERMCMD:-xdg-terminal-exec}"
 
 if command -v yazi >/dev/null 2>&1; then
     "$termcmd" \

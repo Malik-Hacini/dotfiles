@@ -127,7 +127,7 @@ install_tmux_plugins() {
 }
 
 activate_integrations() {
-    omarchy default terminal kitty
+    omarchy default terminal foot
     omarchy default browser zen
     omarchy default editor nvim
     omarchy theme refresh

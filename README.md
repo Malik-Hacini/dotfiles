@@ -16,7 +16,7 @@ The Omarchy profile keeps Hyprland, the Omarchy shell, notifications, lock scree
 
 - Omarchy desktop: `Hyprland`, Omarchy shell/menu, and Omarchy lock/screenshot tools
 - Legacy desktop: `i3`, `picom`, `polybar`, `rofi`, `dunst`, and `i3lock-color`
-- Terminal emulator: `kitty`
+- Terminal emulator: `foot` by default; `kitty` retained for Kitty-specific features
 - Shell and prompt: `fish` and `starship`
 - Terminal tools: `tmux`, `lazygit`, `zoxide`, `fzf`, and `yazi`
 - Editing: `neovim` (see the [Neovim config README](nvim/.config/nvim/README.md) for details).
@@ -93,7 +93,7 @@ julia --startup-file=no --history-file=no --project="$HOME/.julia/environments/n
 
 - Missing Arch/AUR packages from `packages/omarchy.arch.txt` and `packages/omarchy.aur.arch.txt`
 - Personal application key aliases layered over Omarchy's complete default Hyprland keymap
-- Dynamic Omarchy colors for Neovim, Kitty, btop, LazyGit, tmux, Yazi, Zathura, Qutebrowser, Zen, Starship, and Fastfetch
+- Dynamic Omarchy colors for Neovim, Foot, Kitty, btop, LazyGit, tmux, Yazi, Zathura, Qutebrowser, Zen, Starship, and Fastfetch
 - TPM, tmux-resurrect, tmux-continuum, user services, portal routing, and MIME handlers
 - Zen profile CSS synchronization after the browser creates its first profile
 

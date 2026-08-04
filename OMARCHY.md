@@ -21,7 +21,7 @@ Nothing under `/usr/share/omarchy/` is modified.
 
 ## Dynamic Themes
 
-Omarchy's active `colors.toml` drives Neovim and the user templates for Zathura and Zen. Existing Omarchy integrations continue to recolor Kitty, btop, tmux, and supported applications. Neovim loads the shared palette adapter directly, avoiding theme-specific files that Omarchy copies into its generated state.
+Omarchy's active `colors.toml` drives Neovim and the user templates for Zathura and Zen. Existing Omarchy integrations continue to recolor Foot, Kitty, btop, tmux, and supported applications. Neovim loads the shared palette adapter directly, avoiding theme-specific files that Omarchy copies into its generated state.
 
 Run `omarchy theme refresh` after changing templates. The `theme-set` hook copies generated Zathura and Zen assets into their application config locations.
 

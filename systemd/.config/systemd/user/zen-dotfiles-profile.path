@@ -5,6 +5,8 @@ Description=Apply dotfiles when Zen creates a browser profile
 PathChanged=%h/.zen
 PathChanged=%h/.config/zen
 PathChanged=%h/.var/app/app.zen_browser.zen
+PathChanged=%h/.local/state/omarchy/current/theme/zen.css
+PathChanged=%h/.local/state/omarchy/current/theme/zen-logo.svg
 Unit=zen-dotfiles-profile.service
 
 [Install]

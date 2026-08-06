@@ -30,6 +30,7 @@ The `plugins/` directory contains third-party code, especially Catppuccin and TP
 - Attaching terminals refresh tmux's session environment for new panes/windows
 - `i3/.config/i3/config`: propagates the legacy X11 session environment
 - `kitty/.config/kitty/kitty.conf`: outer terminal for clipboard/passthrough behavior
+- `systemd/.config/systemd/user/tmux.service`: starts restore after the graphical session environment is ready
 
 ## Validation
 

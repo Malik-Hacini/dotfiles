@@ -1,0 +1,15 @@
+[Unit]
+Description=tmux default session (detached)
+Documentation=man:tmux(1)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/tmux new-session -d
+ExecStop=/usr/bin/env bash -lc 'tmux ls >/dev/null 2>&1 && "%h/.tmux/plugins/tmux-resurrect/scripts/save.sh" || true'
+ExecStop=/usr/bin/env bash -lc 'tmux ls >/dev/null 2>&1 && tmux kill-server || true'
+KillMode=control-group
+
+[Install]
+WantedBy=graphical-session.target

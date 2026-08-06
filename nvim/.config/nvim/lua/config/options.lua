@@ -4,6 +4,11 @@
 local M = {}
 
 function M.setup()
+  local omarchy_clipboard = "/usr/share/omarchy-nvim/config/lua/config/remote_clipboard.lua"
+  if vim.fn.filereadable(omarchy_clipboard) == 1 then
+    dofile(omarchy_clipboard).setup()
+  end
+
   -- Disable unused built-in plugins to improve startup performance
   vim.g.loaded_matchit = 1        -- Disable enhanced % matching
   vim.g.loaded_matchparen = 1     -- Disable highlight of matching parentheses
@@ -24,8 +29,6 @@ function M.setup()
   vim.g.loaded_ruby_provider = 0
   vim.g.loaded_perl_provider = 0
   
-  local in_tmux = os.getenv("TMUX") ~= nil
-
   local options = {
     -- GENERAL
     timeoutlen = 300,               -- allow prefixed mappings like surround and leader chords to resolve reliably
@@ -94,38 +97,12 @@ function M.setup()
     vim.opt[k] = v
   end
 
-  -- Keep implicit system clipboard sync outside tmux.
-  -- Inside tmux, unnamedplus makes routine edits like `x` emit OSC 52 writes
-  -- on every delete, which is enough to destabilize this tmux setup.
-  vim.opt.clipboard = in_tmux and "" or "unnamedplus"
-
   -- Use diagonal fillers for deleted lines in diff mode.
   vim.opt.fillchars:append({ diff = "╱" })
 
   -- Keep legacy regex syntax available for any filetype Treesitter doesn't cover.
   vim.cmd("syntax enable")
 
-  -- Clipboard inside tmux: keep explicit `"+`/`"*` access over OSC 52 without
-  -- routing every delete/change through the system clipboard.
-  -- OSC 52 paste hangs (terminal doesn't respond to read requests), so paste
-  -- falls back to the unnamed register. Use Ctrl+Shift+V to paste from system clipboard.
-  if in_tmux then
-    local function paste()
-      return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
-    end
-    vim.g.clipboard = {
-      name = "OSC 52",
-      copy = {
-        ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-        ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-      },
-      paste = {
-        ["+"] = paste,
-        ["*"] = paste,
-      },
-    }
-  end
-  
   -- Disable Ctrl+click tag jumping for markdown files
   vim.api.nvim_create_autocmd({"FileType"}, {
     pattern = {"markdown"},
@@ -161,21 +138,6 @@ function M.setup()
     once = true
   })
 
-  -- CLIPBOARD -- (for yanky)
-  -- May help Arch/Debian Linux users
-  -- vim.g.clipboard = {
-  --   name = "xsel_override",
-  --   copy = {
-  --     ["+"] = "xsel --input --clipboard",
-  --     ["*"] = "xsel --input --primary",
-  --   },
-  --   paste = {
-  --     ["+"] = "xsel --output --clipboard",
-  --     ["*"] = "xsel --output --primary",
-  --   },
-  --   cache_enabled = 1,
-  -- }
-  
   -- Performance optimizations
   -- Reduce the frequency of status line updates
   vim.opt.lazyredraw = true

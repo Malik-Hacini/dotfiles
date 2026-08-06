@@ -138,11 +138,8 @@ activate_integrations() {
     configure_mime
 
     if systemctl --user daemon-reload; then
-        systemctl --user enable zen-dotfiles-profile.path tmux.service
+        systemctl --user enable zen-dotfiles-profile.path
         systemctl --user start zen-dotfiles-profile.path
-        if ! tmux has-session 2>/dev/null; then
-            systemctl --user start tmux.service
-        fi
         systemctl --user restart xdg-desktop-portal.service
         systemctl --user restart xdg-desktop-portal-termfilechooser.service
     else

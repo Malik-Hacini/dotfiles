@@ -5,8 +5,9 @@ After=graphical-session.target
 PartOf=graphical-session.target
 
 [Service]
-Type=forking
-ExecStart=/usr/bin/tmux new-session -d
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/env bash -c '/usr/bin/tmux has-session 2>/dev/null || /usr/bin/tmux new-session -d'
 ExecStop=/usr/bin/env bash -lc 'tmux ls >/dev/null 2>&1 && "%h/.tmux/plugins/tmux-resurrect/scripts/save.sh" || true'
 ExecStop=/usr/bin/env bash -lc 'tmux ls >/dev/null 2>&1 && tmux kill-server || true'
 KillMode=control-group

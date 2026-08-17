@@ -16,7 +16,7 @@
   "mcp": {
     "firecrawl": {
       "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
+      "command": ["mise", "exec", "node@26.5.1", "--", "npx", "-y", "firecrawl-mcp"],
       "enabled": true,
       "environment": {
         "FIRECRAWL_API_KEY": "{file:~/.config/opencode/firecrawl_api_key}"

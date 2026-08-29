@@ -131,3 +131,6 @@ set -l fish_local_config "$HOME/.config/fish/local.fish"
 if test -f "$fish_local_config"
     source "$fish_local_config"
 end
+
+# opencode
+fish_add_path /home/tag/.opencode/bin

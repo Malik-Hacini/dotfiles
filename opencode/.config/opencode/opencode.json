@@ -1,11 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system",
   "autoupdate": false,
-  "plugin": ["@howaboua/opencode-usage-plugin"],
-  "provider": {
+  "providers": {
     "openai": {
-      "options": {
+      "settings": {
         "headerTimeout": 60000,
         "timeout": 600000,
         "chunkTimeout": 60000
@@ -14,16 +12,18 @@
   },
   "lsp": {},
   "mcp": {
-    "firecrawl": {
-      "type": "local",
-      "command": ["mise", "exec", "node@26.5.1", "--", "npx", "-y", "firecrawl-mcp"],
-      "enabled": true,
-      "environment": {
-        "FIRECRAWL_API_KEY": "{file:~/.config/opencode/firecrawl_api_key}"
+    "servers": {
+      "firecrawl": {
+        "type": "local",
+        "command": ["mise", "exec", "node@26.5.1", "--", "npx", "-y", "firecrawl-mcp"],
+        "disabled": false,
+        "environment": {
+          "FIRECRAWL_API_KEY": "{file:~/.config/opencode/firecrawl_api_key}"
+        }
       }
     }
   },
-  "permission": {
-    "edits": "ask"
-  }
+  "permissions": [
+    { "action": "edit", "resource": "*", "effect": "ask" }
+  ]
 }
